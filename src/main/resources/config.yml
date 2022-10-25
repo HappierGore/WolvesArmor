@@ -1,0 +1,88 @@
+#If you're facing errors, please, enable debug_mode and send me the log in my
+#discord server:
+#https://discord.gg/dVhXcG3JHZ
+     
+debug_mode: false
+wolf_inventory_name: "Wolf inventory"
+
+OtherItems:
+    ArmorAllowed:
+        Item: "GREEN_STAINED_GLASS_PANE"
+        Displayname: "&aArmor"
+        Lore:
+            - "&eInsert here an armor"
+            - "&efor the wolf"
+    ArmorNotAllowed:
+        Item: "RED_STAINED_GLASS_PANE"
+        Displayname: "&cArmor"
+        Lore:
+            - "&cYou have not allowed to"
+            - "&cinsert armors to your wolf"
+    ChestAllowed:
+        Item: "GREEN_STAINED_GLASS_PANE"
+        Displayname: "&6Chest"
+        Lore:
+            - "&eInsert here a chest"
+            - "&efor the wolf" 
+    ChestNotAllowed:
+        Item: "RED_STAINED_GLASS_PANE"
+        Displayname: "&cChest"
+        Lore:
+            - "&cYou have not allowed to"
+            - "&cinsert chests to your wolf"
+
+Armors:
+    Leather:
+        Protection: 10
+        Durability: 60
+        Item: "LEATHER_HORSE_ARMOR"
+        Displayname: "&6Basic wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"
+    Iron:
+        Protection: 20
+        Durability: 180
+        Item: "IRON_HORSE_ARMOR"
+        Displayname: "&6Normal wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"
+    Gold:
+        Protection: 30
+        Durability: 100
+        Item: "GOLDEN_HORSE_ARMOR"
+        Displayname: "&6Golden wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"
+    Diamond:
+        Protection: 40
+        Durability: 400
+        Item: "DIAMOND_HORSE_ARMOR"
+        Displayname: "&6Advanced wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"
+    Netherite:
+        Protection: 50
+        Durability: 800
+        Item: "NETHERITE_INGOT"
+        Displayname: "&6God wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"
+    Inmortal:
+        Protection: 100
+        Durability: 1000
+        Item: "BEACON"
+        Displayname: "&6Inmortal wolves armor."
+        Lore:
+            - "&eDurability: &a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}"

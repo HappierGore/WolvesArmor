@@ -1,0 +1,15 @@
+name: WolvesArmors
+version: 1.0
+main: com.happiergore.wolves_armors.main
+api-version: 1.18
+author: HappierGore
+discord: HappierGore#1197
+prefix: StopVinesGrowing
+website: https://www.spigotmc.org/resources/authors/happiergore.1046101/
+depend: [NBTAPI]
+commands:     
+  wolvesarmor:
+    description: main command for wolves armors
+    aliases: [wa]
+
+      
