@@ -26,7 +26,6 @@ public class WolfData {
         return UUID;
     }
 
-    public void setArmor(Armors armor) {
     public Armor getArmor() {
         return armor;
     }
