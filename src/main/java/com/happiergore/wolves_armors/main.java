@@ -3,7 +3,7 @@ package com.happiergore.wolves_armors;
 import com.happiergore.menusapi.Events;
 import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.Events.OnClickTamedWolf;
-import com.happiergore.wolves_armors.Items.ArmorsLoader;
+import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
 import com.happiergore.wolves_armors.Utils.UpdateChecker;
@@ -47,6 +47,8 @@ public class main extends JavaPlugin implements Listener {
 
         setupManager();
 
+        wolvesYAML = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "Wolves_data", false);
+        Config.reloadConfig();
         //Metrics
         //int pluginId = 15538; // <-- Replace with the id of your plugin!
         //metrics = new Metrics(this, pluginId);
@@ -54,10 +56,6 @@ public class main extends JavaPlugin implements Listener {
 
         //Crear config.yml en caso de que no exista
         saveDefaultConfig();
-
-        wolvesYAML = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "Wolves_data", false);
-        new ArmorsLoader().load();
-
         //Registrar eventos
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(), this);

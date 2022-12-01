@@ -1,6 +1,6 @@
 package com.happiergore.wolves_armors.cmds;
 
-import com.happiergore.wolves_armors.Items.ArmorsLoader;
+import com.happiergore.wolves_armors.Items.Config;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.command.Command;
@@ -21,9 +21,11 @@ public class argsComplete implements TabCompleter {
             completions.add("reload");
             completions.add("gui");
             completions.add("get");
+            completions.add("read_nbt");
+            completions.add("read_nbt_keys");
         }
         if (args.length == 2) {
-            ArmorsLoader.armorsLoaded.forEach(armor -> completions.add(armor.getItemIdentifier()));
+            Config.armorsLoaded.forEach(armor -> completions.add(armor.getIdentifier()));
         }
         return completions;
     }

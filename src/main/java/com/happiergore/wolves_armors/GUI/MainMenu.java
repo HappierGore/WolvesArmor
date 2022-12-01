@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
  */
 public class MainMenu extends GUI {
 
-    WolfData wolfData;
+    public final WolfData wolfData;
 
     public MainMenu(Player player, String entityUUID) {
         super(player, main.configYML.getString("wolf_inventory_name"));
@@ -56,8 +56,6 @@ public class MainMenu extends GUI {
         } else {
             this.registerBtn(8, new ArmorsIcon(this));
         }
-        this.registerBtn(4, new ArmorAllowed(this));
-        this.registerBtn(1, new ArmorsIcon(this));
     }
 
 }

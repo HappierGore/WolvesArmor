@@ -1,8 +1,10 @@
 package com.happiergore.wolves_armors.Items;
 
-import com.happiergore.wolves_armors.Utils.Serializers;
+import com.happiergore.menusapi.Utils.ItemUtils;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
+import java.util.List;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -13,63 +15,44 @@ public class Armors implements Serializable {
 
     private int protection;
     private int durability;
-    private int maxDurability;
-    private String itemSerialized;
-    private String itemIdentifier;
+    private String item;
+    private List<String> lore;
+    private String displayName;
+    private String identifier;
 
-    public Armors(int protection, int durability, int maxDurability, String itemIdentifier, ItemStack item) {
+    public Armors(String identifier, String item, List<String> lore, String displayname, int protection, int durability) {
         this.protection = protection;
         this.durability = durability;
-        this.maxDurability = maxDurability;
-        this.itemIdentifier = itemIdentifier;
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.setBoolean("Wolves_Armors", true);
-        nbtItem.setInteger("Wolves_Armors_Protection", protection);
-        nbtItem.setInteger("Wolves_Armors_Max_Durability", durability);
-        nbtItem.setInteger("Wolves_Armors_Durability", durability);
-        nbtItem.setString("Wolves_Armors_Identifier", itemIdentifier);
-        this.itemSerialized = Serializers.serializeItem(nbtItem.getItem());
+        this.item = item;
+        this.lore = lore;
+        this.displayName = displayname;
+        this.identifier = identifier;
     }
 
-    public Armors(int protection, int durability, int maxDurability, String itemIdentifier, String itemSerialized) {
-        this.protection = protection;
-        this.durability = durability;
-        this.maxDurability = maxDurability;
-        this.itemIdentifier = itemIdentifier;
-        ItemStack item = Serializers.deserializeItem(itemSerialized);
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.setBoolean("Wolves_Armors", true);
-        nbtItem.setInteger("Wolves_Armors_Protection", protection);
-        nbtItem.setInteger("Wolves_Armors_Max_Durability", durability);
-        nbtItem.setInteger("Wolves_Armors_Durability", durability);
-        nbtItem.setString("Wolves_Armors_Identifier", itemIdentifier);
-        this.itemSerialized = Serializers.serializeItem(nbtItem.getItem());
+    /**
+     * Retorna un nuevo item, tomando ya sus datos principales, como lore y
+     * displayname
+     *
+     * @return ItemStack
+     */
+    public ItemStack getItem() {
+        Material material = Material.getMaterial(item);
+        if (material == null) {
+            material = Material.BEDROCK;
+            lore.clear();
+            lore.add("&7The item type specified (" + this.item + ")");
+            lore.add("&7doesn't exists.");
+            lore.add("&7Check your config.yml on " + this.identifier + " armor.");
+            displayName = "&cError";
+        }
+        NBTItem nbtItem = new NBTItem(new ItemUtils().generateItem(null, material, displayName, lore, null));
+        nbtItem.setString("Wolves_Armor_Identifier", this.identifier);
+        return nbtItem.getItem();
     }
 
-    public String getItemIdentifier() {
-        return itemIdentifier;
-    }
-
-    public void setItemIdentifier(String itemIdentifier) {
-        this.itemIdentifier = itemIdentifier;
-    }
-
-    public int getMaxDurability() {
-        return maxDurability;
-    }
-
-    public void setMaxDurability(int maxDurability) {
-        this.maxDurability = maxDurability;
-    }
-
-    public String getItemSerialized() {
-        return itemSerialized;
-    }
-
-    public void setItemSerialized(String itemSerialized) {
-        this.itemSerialized = itemSerialized;
-    }
-
+    //------------------------------------
+    //          Getters & Setters
+    //------------------------------------
     public int getProtection() {
         return protection;
     }
@@ -86,31 +69,32 @@ public class Armors implements Serializable {
         this.durability = durability;
     }
 
-    public ItemStack getItem() {
-        return Serializers.deserializeItem(this.itemSerialized);
+    public void setItem(String item) {
+        this.item = item;
     }
 
-    public void setItem(ItemStack item) {
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.setBoolean("Wolves_Armors", true);
-        nbtItem.setInteger("Wolves_Armors_Protection", protection);
-        nbtItem.setInteger("Wolves_Armors_Max_Durability", durability);
-        nbtItem.setInteger("Wolves_Armors_Durability", durability);
-        nbtItem.setString("Wolves_Armors_Identifier", itemIdentifier);
-        this.itemSerialized = Serializers.serializeItem(nbtItem.getItem());
+    public List<String> getLore() {
+        return lore;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Armors{");
-        sb.append("protection=").append(protection);
-        sb.append(", durability=").append(durability);
-        sb.append(", maxDurability=").append(maxDurability);
-        sb.append(", itemIdentifier=").append(itemIdentifier);
-        sb.append(", itemSerialized=").append(itemSerialized);
-        sb.append('}');
-        return sb.toString();
+    public void setLore(List<String> lore) {
+        this.lore = lore;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
 }
