@@ -1,18 +1,11 @@
-package com.happiergore.wolves_armors.GUI;
+package com.happiergore.wolves_armors.GUI.Armor;
 
 import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.ItemsTypes.Behaviour;
-import com.happiergore.menusapi.Utils.ItemUtils;
 import com.happiergore.wolves_armors.Data.WolfData;
-import com.happiergore.wolves_armors.Items.Armor;
-import com.happiergore.wolves_armors.Items.Armors;
-import com.happiergore.wolves_armors.Utils.Serializers;
-import com.happiergore.wolves_armors.Utils.YAML.YAMLList;
+import com.happiergore.wolves_armors.GUI.MainMenu;
 import com.happiergore.wolves_armors.main;
-import de.tr7zw.nbtapi.NBTItem;
-import java.util.List;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 

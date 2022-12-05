@@ -18,13 +18,13 @@ public class OnClickTamedWolf {
         if (e.getRightClicked().getType() == EntityType.WOLF) {
             Wolf wolf = (Wolf) e.getRightClicked();
             if (!wolf.isTamed()
-                    || wolf.getOwner().getUniqueId().toString().equals(e.getPlayer().getUniqueId().toString())) {
+                    || !wolf.getOwner().getUniqueId().toString().equals(e.getPlayer().getUniqueId().toString())) {
                 return;
             }
 
             System.out.println("The owner of " + wolf.getName() + "(" + wolf.getUniqueId().toString() + ")" + " clicked upon it");
-            new MainMenu(e.getPlayer(), wolf.getUniqueId().toString()).open();
             e.setCancelled(true);
+            new MainMenu(e.getPlayer(), wolf.getUniqueId().toString()).open();
         }
     }
 }

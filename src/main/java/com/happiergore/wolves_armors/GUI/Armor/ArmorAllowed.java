@@ -1,9 +1,10 @@
-package com.happiergore.wolves_armors.GUI;
+package com.happiergore.wolves_armors.GUI.Armor;
 
 import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.ItemsTypes.Behaviour;
 import com.happiergore.menusapi.Utils.ItemUtils;
 import com.happiergore.wolves_armors.Data.WolfData;
+import com.happiergore.wolves_armors.GUI.MainMenu;
 import com.happiergore.wolves_armors.Items.Armor;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
@@ -38,16 +39,11 @@ public class ArmorAllowed extends Behaviour {
 
         wolfData.setArmor(armor);
 
-        System.out.println("New entry created: " + wolfData.toString());
-
         main.wolvesYAML.getConfig().set(wolfData.getUUID() + ".Armor", Serializers.serialize(armor));
         e.setCursor(null);
         this.getGUI().updateInventory();
         main.wolvesData.put(wolfData.getUUID(), wolfData);
         main.wolvesYAML.SaveFile();
-
-        System.out.println("Wolves data:" + main.wolvesData.toString());
-
         e.setCancelled(true);
     }
 

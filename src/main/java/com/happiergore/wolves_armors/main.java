@@ -3,9 +3,12 @@ package com.happiergore.wolves_armors;
 import com.happiergore.menusapi.Events;
 import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.Events.OnClickTamedWolf;
+import com.happiergore.wolves_armors.Events.OnWolfDamaged;
+import com.happiergore.wolves_armors.Events.OnWolfDeath;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
+import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.Utils.UpdateChecker;
 import com.happiergore.wolves_armors.Utils.YAML.YamlJBDC;
 import com.happiergore.wolves_armors.cmds.Commands;
@@ -18,6 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +64,18 @@ public class main extends JavaPlugin implements Listener {
         //Registrar eventos
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(), this);
+    }
+
+    @Override
+    public void onDisable() {
+        console.infoMsg("&eSaving data...");
+        wolvesData.values().forEach(wolf -> {
+            if (wolf.getArmor() != null) {
+                main.wolvesYAML.getConfig().set(wolf.getUUID() + ".Armor", Serializers.serialize(wolf.getArmor()));
+            }
+            main.wolvesYAML.SaveFile();
+        });
+        console.infoMsg("&aSaved &n" + wolvesData.size() + "&r&a entries!");
     }
 
     //***********************
@@ -109,6 +126,16 @@ public class main extends JavaPlugin implements Listener {
     @EventHandler
     public void onClickEntity(PlayerInteractAtEntityEvent e) {
         OnClickTamedWolf.listen(e);
+    }
+
+    @EventHandler
+    public void onDamageEntity(EntityDamageEvent e) {
+        OnWolfDamaged.listen(e);
+    }
+
+    @EventHandler
+    public void onDeathEntity(EntityDeathEvent e) {
+        OnWolfDeath.listen(e);
     }
 
     private boolean setupManager() {

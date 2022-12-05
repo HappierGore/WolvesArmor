@@ -2,7 +2,10 @@ package com.happiergore.wolves_armors.Items;
 
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Esta clase permite crear un objeto de tipo armadura. Este contiene datos como
@@ -65,12 +68,28 @@ public class Armor implements Serializable {
      * @return Item con sus propiedades actualizadas.
      */
     public ItemStack getItem() {
-        NBTItem nbtItem = new NBTItem(this.type.getItem());
+        NBTItem nbtItem = new NBTItem(this.type.getItem(false));
         nbtItem.setInteger("Wolves_Armor_Durability_Reduced", this.durabilityReduced);
         if (!this.wolfUUID.isBlank()) {
             nbtItem.setString("Wolves_Armor_WolfUUID", wolfUUID);
         }
-        return nbtItem.getItem();
+
+        ItemStack item = nbtItem.getItem();
+        List<String> copyLore = new ArrayList<String>() {
+            {
+                addAll(item.getItemMeta().getLore());
+            }
+        };
+        for (int i = 0; i < copyLore.size(); i++) {
+            copyLore.set(i, copyLore.get(i).
+                    replace("${lostedDurability}",
+                            String.valueOf(this.type.getDurability() - this.durabilityReduced)));
+        }
+
+        ItemMeta itmMeta = item.getItemMeta();
+        itmMeta.setLore(copyLore);
+        item.setItemMeta(itmMeta);
+        return item;
     }
 
     //------------------------------------
@@ -80,7 +99,7 @@ public class Armor implements Serializable {
         Armors armors = Config.getValidArmors(armor);
         if (armors == null) {
             throw new Exception("The item (" + armor.getType() + ")"
-                    + "is not a valid armor.");
+                    + " is not a valid armor.");
         }
         return armors;
     }

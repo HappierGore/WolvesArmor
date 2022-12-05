@@ -1,6 +1,8 @@
 package com.happiergore.wolves_armors.cmds;
 
 import com.happiergore.menusapi.Utils.PlayerUtils;
+import com.happiergore.wolves_armors.Items.Armors;
+import com.happiergore.wolves_armors.Items.Chests;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.TextUtils;
 import com.happiergore.wolves_armors.main;
@@ -23,7 +25,7 @@ public class Commands implements CommandExecutor {
         TextUtils textUtils = new TextUtils();
 
         if (args.length == 0) {
-            sender.sendMessage(textUtils.parseColor("&cImcomplete command. Use /wva reload."));
+            sender.sendMessage(textUtils.parseColor("&cImcomplete command. Use /wa reload."));
             return false;
         }
 
@@ -32,26 +34,53 @@ public class Commands implements CommandExecutor {
             main.getPlugin(main.class).reloadConfig();
             main.configYML = main.getPlugin(main.class).getConfig();
             main.debugMode = main.getPlugin(main.class).getConfig().getBoolean("debug_mode");
-            return false;
+            Config.reloadConfig();
+            return true;
         }
 
         if (args[0].equalsIgnoreCase("get")) {
+
             if (args.length == 1) {
-                sender.sendMessage(textUtils.parseColor("&cPlease select one item using tab completion."));
+                sender.sendMessage(textUtils.parseColor("&cIncomplete command, select &narmor&r or &c&nchest"));
                 return false;
             }
-            Config.armorsLoaded.forEach(armor -> {
-                if (armor.getIdentifier().equalsIgnoreCase(args[1])) {
-                    ((Player) sender).getInventory().addItem(armor.getItem());
-                }
-            });
-        }
 
+            if (args[1].equalsIgnoreCase("armor")) {
+                if (args.length == 2) {
+                    sender.sendMessage(textUtils.parseColor("&cPlease select one armor from tab."));
+                    return false;
+                }
+                for (Armors armor : Config.armorsLoaded) {
+                    if (armor.getIdentifier().equalsIgnoreCase(args[2])) {
+                        ((Player) sender).getInventory().addItem(armor.getItem(true));
+                        return true;
+                    }
+                }
+                sender.sendMessage(textUtils.parseColor("&cThat armor doesn't exists."));
+                return false;
+            }
+
+            if (args[1].equalsIgnoreCase("chest")) {
+                if (args.length == 2) {
+                    sender.sendMessage(textUtils.parseColor("&cPlease select one chest from tab."));
+                    return false;
+                }
+                for (Chests chest : Config.chestsLoaded) {
+                    if (chest.getIdentifier().equalsIgnoreCase(args[2])) {
+                        ((Player) sender).getInventory().addItem(chest.getItem());
+                        return true;
+                    }
+                }
+                sender.sendMessage(textUtils.parseColor("&cThat chest doesn't exists."));
+                return false;
+            }
+        }
         if (args[0].equalsIgnoreCase("read_nbt")) {
             if (sender instanceof Player) {
                 int durabilityReduced;
                 String identifier;
                 String wolfUUID;
+                String chestUUID;
                 PlayerUtils player = new PlayerUtils((Player) sender);
                 if (player.get().getItemInHand() == null || player.get().getItemInHand().getType() == Material.AIR) {
                     player.sendColoredMsg("&cYou need an item in your hand to execute this command.");
@@ -61,9 +90,20 @@ public class Commands implements CommandExecutor {
                 identifier = nbtItem.getString("Wolves_Armor_Identifier");
                 wolfUUID = nbtItem.getString("Wolves_Armor_WolfUUID");
                 durabilityReduced = nbtItem.getInteger("Wolves_Armor_Durability_Reduced");
-                player.sendColoredMsg("Wolves_Armor_Identifier: &n" + identifier);
-                player.sendColoredMsg("Wolves_Armor_WolfUUID: &n" + wolfUUID);
-                player.sendColoredMsg("Wolves_Armor_Durability_Reduced: &n" + durabilityReduced);
+                chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
+                if (identifier != null && !identifier.isBlank()) {
+                    player.sendColoredMsg("Wolves_Armor_Identifier: &n" + identifier);
+                }
+                if (wolfUUID != null && !wolfUUID.isBlank()) {
+                    player.sendColoredMsg("Wolves_Armor_WolfUUID: &n" + wolfUUID);
+                }
+                if (chestUUID != null && !chestUUID.isBlank()) {
+                    player.sendColoredMsg("Wolves_Armor_ChestUUID: &n" + chestUUID);
+                }
+                if (durabilityReduced != 0) {
+                    player.sendColoredMsg("Wolves_Armor_Durability_Reduced: &n" + durabilityReduced);
+                }
+                return true;
             }
         }
 
@@ -76,9 +116,10 @@ public class Commands implements CommandExecutor {
                 }
                 NBTItem nbtItem = new NBTItem(player.get().getItemInHand());
                 nbtItem.getKeys().forEach(key -> player.sendColoredMsg(key));
+                return true;
             }
         }
+
         return false;
     }
-
 }
