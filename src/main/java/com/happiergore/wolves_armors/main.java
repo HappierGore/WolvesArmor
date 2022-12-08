@@ -5,6 +5,7 @@ import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.Events.OnClickTamedWolf;
 import com.happiergore.wolves_armors.Events.OnWolfDamaged;
 import com.happiergore.wolves_armors.Events.OnWolfDeath;
+import com.happiergore.wolves_armors.Events.OnDragItem;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
@@ -22,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author HappierGore
  */
 public class main extends JavaPlugin implements Listener {
-
+    
     public static boolean debugMode;
     public static ConsoleUtils console;
     private String sversion;
@@ -38,19 +40,19 @@ public class main extends JavaPlugin implements Listener {
     public UpdateChecker updateChecker;
     public static YamlJBDC wolvesYAML;
     public static Map<String, WolfData> wolvesData = new HashMap<>();
-
+    
     public static FileConfiguration configYML;
-
+    
     @Override
     public void onEnable() {
-
+        
         configYML = getConfig();
         console = new ConsoleUtils();
         debugMode = getConfig().getBoolean("debug_mode");
         //updateChecker = new UpdateChecker(100948);
 
         setupManager();
-
+        
         wolvesYAML = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "Wolves_data", false);
         Config.reloadConfig(false);
         //Metrics
@@ -64,7 +66,7 @@ public class main extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(), this);
     }
-
+    
     @Override
     public void onDisable() {
         Config.saveData();
@@ -80,7 +82,7 @@ public class main extends JavaPlugin implements Listener {
         this.getCommand("wolvesarmor").setExecutor(new Commands());
         this.getCommand("wolvesarmor").setTabCompleter(new argsComplete());
     }
-
+    
     private void successMessage(String version) {
         List<String> msg = new ArrayList<>();
         msg.add("&b" + this.getName() + " &a has been loaded successfully");
@@ -92,7 +94,7 @@ public class main extends JavaPlugin implements Listener {
         msg.add("&9Server version: &a1." + version);
         msg.add("");
         msg.add("&9Debug mode: &a" + debugMode);
-
+        
         msg.add("");
 
 //        switch (updateChecker.getUpdateCheckResult()) {
@@ -114,22 +116,27 @@ public class main extends JavaPlugin implements Listener {
 //        }
         console.loggerMsg(msg);
     }
-
+    
     @EventHandler
     public void onClickEntity(PlayerInteractAtEntityEvent e) {
         OnClickTamedWolf.listen(e);
     }
-
+    
     @EventHandler
     public void onDamageEntity(EntityDamageEvent e) {
         OnWolfDamaged.listen(e);
     }
-
+    
     @EventHandler
     public void onDeathEntity(EntityDeathEvent e) {
         OnWolfDeath.listen(e);
     }
-
+    
+    @EventHandler
+    public void onDrag(InventoryDragEvent e) {
+        OnDragItem.listen(e);
+    }
+    
     private boolean setupManager() {
         sversion = "N/A";
         try {
@@ -139,7 +146,7 @@ public class main extends JavaPlugin implements Listener {
             sversion = "v1_19";
         }
         successMessage(sversion);
-
+        
         return true;
     }
 }

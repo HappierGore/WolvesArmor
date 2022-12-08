@@ -26,7 +26,7 @@ public class ChestAllowed extends Behaviour {
 
     @Override
     public void onClick(InventoryClickEvent e) {
-        if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
+        if (e.getCursor().getType() == Material.AIR) {
             e.setCancelled(true);
             return;
         }

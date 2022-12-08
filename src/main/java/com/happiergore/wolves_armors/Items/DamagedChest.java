@@ -1,7 +1,8 @@
 package com.happiergore.wolves_armors.Items;
 
+import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.Utils.TextUtils;
-import com.happiergore.wolves_armors.main;
+import com.happiergore.wolves_armors.GUI.WolfInventory;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -22,7 +24,7 @@ public class DamagedChest implements Serializable {
 
     private Chests type;
     private String chestUUID;
-    private Map<Integer, ItemStack> content = new HashMap<>();
+    public final Map<Integer, String> content = new HashMap<>();
     private int timesOpened;
     private String wolfUUID;
     private boolean wolfDeath;
@@ -60,11 +62,9 @@ public class DamagedChest implements Serializable {
         if (nbtItem.hasKey("Wolves_Armor_ChestUUID")) {
             this.chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
         } else {
-            main.console.infoMsg("Creating a new random UUID for chest...");
             this.chestUUID = UUID.randomUUID().toString();
         }
         this.wolfDeath = nbtItem.getBoolean("Wolves_Armor_WolfDeath");
-        main.console.infoMsg("WolfDeath:" + wolfDeath);
     }
 
     /**
@@ -81,11 +81,16 @@ public class DamagedChest implements Serializable {
      * Cuando se abra el cofre y este haya alcanzado el número máximo de veces
      * permitidas abrir, retornará falso
      *
+     * @param player Jugador a quien se le abrirá el inventario
      * @return falso si alcanzó su límite de abrir
      */
-    public boolean openChest() {
-        this.timesOpened++;
-        //Recuperar inventario por UUID y abrirlo
+    public boolean openChest(Player player) {
+        GUI gui = new WolfInventory(player, chestUUID, this);
+        if (this.wolfDeath) {
+            this.timesOpened++;
+            //Recuperar inventario por UUID y abrirlo
+        }
+        gui.open();
         return this.timesOpened > type.getTimesAllowedToOpen();
     }
 
@@ -169,14 +174,6 @@ public class DamagedChest implements Serializable {
 
     public void setChestUUID(String chestUUID) {
         this.chestUUID = chestUUID;
-    }
-
-    public Map<Integer, ItemStack> getContent() {
-        return content;
-    }
-
-    public void setContent(Map<Integer, ItemStack> content) {
-        this.content = content;
     }
 
     public int getTimesOpened() {

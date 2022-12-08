@@ -7,8 +7,11 @@ import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.GUI.Chest.ChestAllowed;
 import com.happiergore.wolves_armors.GUI.Chest.ChestsIcon;
 import com.happiergore.wolves_armors.main;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 /**
@@ -20,13 +23,26 @@ public class MainMenu extends GUI {
     public final WolfData wolfData;
 
     public MainMenu(Player player, String entityUUID) {
-        super(player, main.configYML.getString("wolf_inventory_name"));
+        super(player, main.configYML.getString("wolf_menu_name"));
         if (main.wolvesData.containsKey(entityUUID)) {
             this.wolfData = main.wolvesData.get(entityUUID);
         } else {
             this.wolfData = new WolfData(entityUUID);
         }
         this.setInventory(Bukkit.createInventory((GUI) this, 9, this.INVENTORY_TITLE));
+    }
+
+    @Override
+    public void onInventoryClick(InventoryClickEvent e) {
+        super.onInventoryClick(e);
+        if (e.getClickedInventory() == this.getInventory()) {
+            if (e.getCurrentItem() == null) {
+                e.setCancelled(true);
+            }
+        }
+        if (e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+            e.setCancelled(true);
+        }
     }
 
     @Override

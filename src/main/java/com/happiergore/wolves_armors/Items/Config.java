@@ -145,6 +145,9 @@ public class Config {
             if (wolf.getArmor() != null) {
                 main.wolvesYAML.getConfig().set(wolf.getUUID() + ".Armor", Serializers.serialize(wolf.getArmor()));
             }
+            if (wolf.getChest() != null) {
+                main.wolvesYAML.getConfig().set(wolf.getUUID() + ".Chest", Serializers.serialize(wolf.getChest()));
+            }
             main.wolvesYAML.SaveFile();
         });
         console.infoMsg("&aSaved &n" + wolvesData.size() + "&r&a entries!");
