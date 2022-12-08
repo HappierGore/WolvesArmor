@@ -21,8 +21,7 @@ public class OnClickTamedWolf {
                     || !wolf.getOwner().getUniqueId().toString().equals(e.getPlayer().getUniqueId().toString())) {
                 return;
             }
-
-            System.out.println("The owner of " + wolf.getName() + "(" + wolf.getUniqueId().toString() + ")" + " clicked upon it");
+            //wolf.setSitting(true);
             e.setCancelled(true);
             new MainMenu(e.getPlayer(), wolf.getUniqueId().toString()).open();
         }

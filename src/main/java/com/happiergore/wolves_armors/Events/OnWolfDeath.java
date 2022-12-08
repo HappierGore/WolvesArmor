@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.happiergore.wolves_armors.Events;
 
 import com.happiergore.wolves_armors.Data.WolfData;
@@ -25,6 +21,10 @@ public class OnWolfDeath {
                     WolfData wolfData = main.wolvesData.get(wolfUUID);
                     if (wolfData.getArmor() != null) {
                         e.getDrops().add(wolfData.getArmor().getItem());
+                    }
+                    if (wolfData.getChest() != null) {
+                        wolfData.getChest().wolfDeath();
+                        e.getDrops().add(wolfData.getChest().getItem());
                     }
                     main.wolvesData.remove(wolfUUID);
                     main.wolvesYAML.getConfig().set(wolfUUID, null);

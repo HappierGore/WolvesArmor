@@ -3,6 +3,8 @@ package com.happiergore.wolves_armors.Items;
 import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
+import static com.happiergore.wolves_armors.main.console;
+import static com.happiergore.wolves_armors.main.wolvesData;
 import de.tr7zw.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +20,25 @@ public class Config {
     public static final List<Armors> armorsLoaded = new ArrayList<>();
     public static final List<Chests> chestsLoaded = new ArrayList<>();
 
-    public static void reloadConfig() {
+    public static void reloadConfig(boolean save) {
+        if (save) {
+            saveData();
+        }
         armorsLoaded.clear();
         chestsLoaded.clear();
         main.wolvesData.clear();
         loadArmors();
         loadWolves();
         loadChests();
+
+        for (WolfData wolf : main.wolvesData.values()) {
+            if (wolf.getArmor() != null) {
+                wolf.getArmor().updateArmor();
+            }
+            if (wolf.getChest() != null) {
+                wolf.getChest().updateChest();
+            }
+        }
     }
 
     private static void loadArmors() {
@@ -53,6 +67,11 @@ public class Config {
                 if (serializedArmor != null) {
                     wolfData.setArmor((Armor) Serializers.deserialize(serializedArmor));
                 }
+
+                String serializedChest = main.wolvesYAML.getConfig().getString(wolfUUID + ".Chest");
+                if (serializedChest != null) {
+                    wolfData.setChest((DamagedChest) Serializers.deserialize(serializedChest));
+                }
                 main.wolvesData.put(wolfUUID, wolfData);
             }
         });
@@ -65,10 +84,11 @@ public class Config {
                 String identifier = itm;
                 String displayname = main.configYML.getString(path + ".Displayname");
                 int slotsUnlocked = Integer.parseInt(main.configYML.getString(path + ".Slots"));
-                int timesOpenAllowd = Integer.parseInt(main.configYML.getString(path + ".CanOpenAfterDamaged"));
+                int timesOpenAllowed = Integer.parseInt(main.configYML.getString(path + ".CanOpenAfterDamaged"));
                 String material = main.configYML.getString(path + ".Item");
                 List<String> lore = main.configYML.getStringList(path + ".Lore");
-                chestsLoaded.add(new Chests(identifier, material, lore, displayname, slotsUnlocked, timesOpenAllowd));
+                List<String> alternativeLore = main.configYML.getStringList(path + ".LoreWhenDamaged");
+                chestsLoaded.add(new Chests(identifier, material, lore, alternativeLore, displayname, slotsUnlocked, timesOpenAllowed));
             }
         });
     }
@@ -117,5 +137,16 @@ public class Config {
             }
         }
         return null;
+    }
+
+    public static void saveData() {
+        console.infoMsg("&eSaving data...");
+        wolvesData.values().forEach(wolf -> {
+            if (wolf.getArmor() != null) {
+                main.wolvesYAML.getConfig().set(wolf.getUUID() + ".Armor", Serializers.serialize(wolf.getArmor()));
+            }
+            main.wolvesYAML.SaveFile();
+        });
+        console.infoMsg("&aSaved &n" + wolvesData.size() + "&r&a entries!");
     }
 }

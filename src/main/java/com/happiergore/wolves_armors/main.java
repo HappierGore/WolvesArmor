@@ -8,7 +8,6 @@ import com.happiergore.wolves_armors.Events.OnWolfDeath;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
-import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.Utils.UpdateChecker;
 import com.happiergore.wolves_armors.Utils.YAML.YamlJBDC;
 import com.happiergore.wolves_armors.cmds.Commands;
@@ -53,7 +52,7 @@ public class main extends JavaPlugin implements Listener {
         setupManager();
 
         wolvesYAML = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "Wolves_data", false);
-        Config.reloadConfig();
+        Config.reloadConfig(false);
         //Metrics
         //int pluginId = 15538; // <-- Replace with the id of your plugin!
         //metrics = new Metrics(this, pluginId);
@@ -68,14 +67,7 @@ public class main extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        console.infoMsg("&eSaving data...");
-        wolvesData.values().forEach(wolf -> {
-            if (wolf.getArmor() != null) {
-                main.wolvesYAML.getConfig().set(wolf.getUUID() + ".Armor", Serializers.serialize(wolf.getArmor()));
-            }
-            main.wolvesYAML.SaveFile();
-        });
-        console.infoMsg("&aSaved &n" + wolvesData.size() + "&r&a entries!");
+        Config.saveData();
     }
 
     //***********************

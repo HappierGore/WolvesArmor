@@ -34,7 +34,7 @@ public class Commands implements CommandExecutor {
             main.getPlugin(main.class).reloadConfig();
             main.configYML = main.getPlugin(main.class).getConfig();
             main.debugMode = main.getPlugin(main.class).getConfig().getBoolean("debug_mode");
-            Config.reloadConfig();
+            Config.reloadConfig(true);
             return true;
         }
 
@@ -81,6 +81,7 @@ public class Commands implements CommandExecutor {
                 String identifier;
                 String wolfUUID;
                 String chestUUID;
+                boolean wolfDeath;
                 PlayerUtils player = new PlayerUtils((Player) sender);
                 if (player.get().getItemInHand() == null || player.get().getItemInHand().getType() == Material.AIR) {
                     player.sendColoredMsg("&cYou need an item in your hand to execute this command.");
@@ -91,6 +92,7 @@ public class Commands implements CommandExecutor {
                 wolfUUID = nbtItem.getString("Wolves_Armor_WolfUUID");
                 durabilityReduced = nbtItem.getInteger("Wolves_Armor_Durability_Reduced");
                 chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
+                wolfDeath = nbtItem.getBoolean("Wolves_Armor_WolfDeath");
                 if (identifier != null && !identifier.isBlank()) {
                     player.sendColoredMsg("Wolves_Armor_Identifier: &n" + identifier);
                 }
@@ -102,6 +104,9 @@ public class Commands implements CommandExecutor {
                 }
                 if (durabilityReduced != 0) {
                     player.sendColoredMsg("Wolves_Armor_Durability_Reduced: &n" + durabilityReduced);
+                }
+                if (nbtItem.hasKey("Wolves_Armor_WolfDeath")) {
+                    player.sendColoredMsg("Wolves_Armor_WolfDeath: &n" + wolfDeath);
                 }
                 return true;
             }

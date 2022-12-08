@@ -16,14 +16,16 @@ public class Chests implements Serializable {
 
     private String item;
     private List<String> lore;
+    private List<String> alternativeLore;
     private String displayName;
     private String identifier;
     private int slotsUnlocked;
     private int timesAllowedToOpen;
 
-    public Chests(String identifier, String item, List<String> lore, String displayname, int slotsUnlocked, int timesAllowedToOpen) {
+    public Chests(String identifier, String item, List<String> lore, List<String> alternativeLore, String displayname, int slotsUnlocked, int timesAllowedToOpen) {
         this.item = item;
         this.lore = lore;
+        this.alternativeLore = alternativeLore;
         this.displayName = displayname;
         this.identifier = "Chest_" + identifier;
         this.slotsUnlocked = slotsUnlocked;
@@ -101,6 +103,14 @@ public class Chests implements Serializable {
 
     public void setTimesAllowedToOpen(int timesAllowedToOpen) {
         this.timesAllowedToOpen = timesAllowedToOpen;
+    }
+
+    public List<String> getAlternativeLore() {
+        return alternativeLore;
+    }
+
+    public void setAlternativeLore(List<String> alternativeLore) {
+        this.alternativeLore = alternativeLore;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.happiergore.wolves_armors.Data;
 
 import com.happiergore.wolves_armors.Items.Armor;
+import com.happiergore.wolves_armors.Items.DamagedChest;
 
 /**
  *
@@ -9,6 +10,7 @@ import com.happiergore.wolves_armors.Items.Armor;
 public class WolfData {
 
     private Armor armor;
+    private DamagedChest chest;
 
     private final String UUID;
 
@@ -32,6 +34,14 @@ public class WolfData {
 
     public void setArmor(Armor armor) {
         this.armor = armor;
+    }
+
+    public DamagedChest getChest() {
+        return chest;
+    }
+
+    public void setChest(DamagedChest chest) {
+        this.chest = chest;
     }
 
     @Override

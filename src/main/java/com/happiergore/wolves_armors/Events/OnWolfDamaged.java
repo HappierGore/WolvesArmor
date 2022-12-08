@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.happiergore.wolves_armors.Events;
 
 import com.happiergore.menusapi.Utils.PlayerUtils;
@@ -30,20 +26,33 @@ public class OnWolfDamaged {
                     WolfData wolfData = main.wolvesData.get(wolf.getUniqueId().toString());
                     if (wolfData.getArmor() != null) {
                         Armor armor = wolfData.getArmor();
+                        Player player = (Player) wolf.getOwner();
+                        //Si se rompe...
                         if (!armor.damageArmor(1)) {
                             wolfData.setArmor(null);
                             e.getEntity().playEffect(EntityEffect.WOLF_SMOKE);
-                            Player player = (Player) wolf.getOwner();
                             try {
                                 player.playSound(wolf.getLocation(),
                                         Sound.valueOf(main.configYML.getString("Sounds.armorBroken")),
                                         1.0f, 1.0f);
                             } catch (Exception ex) {
                                 PlayerUtils playerUtils = new PlayerUtils(player);
-                                playerUtils.sendColoredMsg("&cThe sound of &narmorBroken&r &c from config.yml is not valid.");
+                                playerUtils.sendColoredMsg("&cThe sound of &narmorBroken&r &cfrom config.yml is not valid.");
                             }
                             main.wolvesYAML.getConfig().set(wolfData.getUUID() + ".Armor", null);
                             main.wolvesYAML.SaveFile();
+                        } else {
+                            try {
+                                player.playSound(wolf.getLocation(),
+                                        Sound.valueOf(main.configYML.getString("Sounds.wolfDamagedWithArmor")),
+                                        1.0f, 1.0f);
+                            } catch (Exception ex) {
+                                PlayerUtils playerUtils = new PlayerUtils(player);
+                                playerUtils.sendColoredMsg("&cThe sound of &nwolfDamagedWithArmor&r &cfrom config.yml is not valid.");
+                            }
+                            double protection = Double.parseDouble(String.valueOf(armor.getType().getProtection())) / 100.0;
+                            double realDamage = e.getDamage() * (1.0 - protection);
+                            e.setDamage(realDamage);
                         }
                     }
                 }

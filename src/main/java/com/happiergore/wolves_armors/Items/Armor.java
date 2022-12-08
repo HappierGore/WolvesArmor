@@ -92,6 +92,13 @@ public class Armor implements Serializable {
         return item;
     }
 
+    public void updateArmor() {
+        try {
+            this.type = this.tryGetArmor(getItem());
+        } catch (Exception ex) {
+        }
+    }
+
     //------------------------------------
     //      Private methods
     //------------------------------------

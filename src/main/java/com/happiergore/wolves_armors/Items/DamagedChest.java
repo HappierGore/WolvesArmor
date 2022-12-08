@@ -1,11 +1,16 @@
 package com.happiergore.wolves_armors.Items;
 
+import com.happiergore.menusapi.Utils.TextUtils;
+import com.happiergore.wolves_armors.main;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Esta clase permite crear un objeto de tipo armadura. Este contiene datos como
@@ -20,6 +25,7 @@ public class DamagedChest implements Serializable {
     private Map<Integer, ItemStack> content = new HashMap<>();
     private int timesOpened;
     private String wolfUUID;
+    private boolean wolfDeath;
 
     /**
      * Crear un objeto en base a uno que ya exista(Desde MC) y no desde el lobo.
@@ -34,6 +40,7 @@ public class DamagedChest implements Serializable {
         NBTItem nbtItem = new NBTItem(chest);
         this.wolfUUID = nbtItem.getString("Wolves_Armor_WolfUUID");
         this.chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
+        this.wolfDeath = nbtItem.getBoolean("Wolves_Armor_WolfDeath");
     }
 
     /**
@@ -44,13 +51,20 @@ public class DamagedChest implements Serializable {
      * @param wolfUUID UUID del lobo en cuestión
      * @throws Exception Si no fue posible crearel cofrte
      */
-    //Crear un objeto en el momento en el que se da clic derecho a un lobo
-    //u obtienen daño
     public DamagedChest(ItemStack chest, String wolfUUID) throws Exception {
         this.type = this.tryGetChest(chest);
-        NBTItem nbtItem = new NBTItem(chest);
-        this.chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
         this.wolfUUID = wolfUUID;
+
+        NBTItem nbtItem = new NBTItem(chest);
+
+        if (nbtItem.hasKey("Wolves_Armor_ChestUUID")) {
+            this.chestUUID = nbtItem.getString("Wolves_Armor_ChestUUID");
+        } else {
+            main.console.infoMsg("Creating a new random UUID for chest...");
+            this.chestUUID = UUID.randomUUID().toString();
+        }
+        this.wolfDeath = nbtItem.getBoolean("Wolves_Armor_WolfDeath");
+        main.console.infoMsg("WolfDeath:" + wolfDeath);
     }
 
     /**
@@ -59,8 +73,20 @@ public class DamagedChest implements Serializable {
      *
      */
     public void wolfDeath() {
-        this.chestUUID = UUID.randomUUID().toString();
+        this.wolfDeath = true;
         //Guardar el cofre en un archivo (inventario) y ponerle una UUID
+    }
+
+    /**
+     * Cuando se abra el cofre y este haya alcanzado el número máximo de veces
+     * permitidas abrir, retornará falso
+     *
+     * @return falso si alcanzó su límite de abrir
+     */
+    public boolean openChest() {
+        this.timesOpened++;
+        //Recuperar inventario por UUID y abrirlo
+        return this.timesOpened > type.getTimesAllowedToOpen();
     }
 
     /**
@@ -70,21 +96,40 @@ public class DamagedChest implements Serializable {
      */
     public ItemStack getItem() {
         NBTItem nbtItem = new NBTItem(this.type.getItem());
-        if (!this.wolfUUID.isBlank()) {
-            nbtItem.setString("Wolves_Armor_WolfUUID", wolfUUID);
-        }
-        if (!this.chestUUID.isBlank()) {
-            nbtItem.setString("Wolves_Armor_ChestUUID", wolfUUID);
-        }
+        nbtItem.setString("Wolves_Armor_WolfUUID", wolfUUID);
+        nbtItem.setString("Wolves_Armor_ChestUUID", chestUUID);
+        nbtItem.setBoolean("Wolves_Armor_WolfDeath", wolfDeath);
 
         ItemStack item = nbtItem.getItem();
-        for (int i = 0; i < item.getItemMeta().getLore().size(); i++) {
-            item.getItemMeta().getLore().set(i, item.getItemMeta().getLore().get(i).
+        ItemMeta itemMeta = item.getItemMeta();
+        List<String> copyLore = new ArrayList<String>() {
+            {
+                addAll(itemMeta.getLore());
+            }
+        };
+
+        if (this.wolfDeath) {
+            item = nbtItem.getItem();
+            copyLore.add("");
+            copyLore.addAll(type.getAlternativeLore());
+        }
+
+        for (int i = 0; i < copyLore.size(); i++) {
+            copyLore.set(i, copyLore.get(i).
                     replace("${remaining_opens}",
                             String.valueOf(this.type.getTimesAllowedToOpen() - this.timesOpened)));
         }
+        copyLore = new TextUtils().parseColor(copyLore);
+        itemMeta.setLore(copyLore);
+        item.setItemMeta(itemMeta);
+        return item;
+    }
 
-        return nbtItem.getItem();
+    public void updateChest() {
+        try {
+            this.type = this.tryGetChest(getItem());
+        } catch (Exception ex) {
+        }
     }
 
     //------------------------------------
@@ -94,7 +139,7 @@ public class DamagedChest implements Serializable {
         Chests chests = Config.getValidChest(chest);
         if (chests == null) {
             throw new Exception("The item (" + chest.getType() + ")"
-                    + "is not a valid chest.");
+                    + " is not a valid chest.");
         }
         return chests;
     }
@@ -140,6 +185,14 @@ public class DamagedChest implements Serializable {
 
     public void setTimesOpened(int timesOpened) {
         this.timesOpened = timesOpened;
+    }
+
+    public boolean isWolfDeath() {
+        return wolfDeath;
+    }
+
+    public void setWolfDeath(boolean wolfDeath) {
+        this.wolfDeath = wolfDeath;
     }
 
 }
