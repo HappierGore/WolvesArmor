@@ -92,6 +92,10 @@ public class Armor implements Serializable {
         return item;
     }
 
+    /**
+     * Actualizará el tipo del cofre, logrando así mantener al día las
+     * configuraciones hechas por el usuario desde confiy.yml
+     */
     public void updateArmor() {
         try {
             this.type = this.tryGetArmor(getItem());

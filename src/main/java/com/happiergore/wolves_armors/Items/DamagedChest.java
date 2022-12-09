@@ -1,8 +1,11 @@
 package com.happiergore.wolves_armors.Items;
 
 import com.happiergore.menusapi.GUI;
+import com.happiergore.menusapi.Utils.PlayerUtils;
 import com.happiergore.menusapi.Utils.TextUtils;
 import com.happiergore.wolves_armors.GUI.WolfInventory;
+import com.happiergore.wolves_armors.Utils.Serializers;
+import com.happiergore.wolves_armors.main;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,7 +79,9 @@ public class DamagedChest implements Serializable {
      */
     public void wolfDeath() {
         this.wolfDeath = true;
-        //Guardar el cofre en un archivo (inventario) y ponerle una UUID
+        String serializedChest = Serializers.serialize(this);
+        main.chestData.getConfig().set(chestUUID, serializedChest);
+        main.chestData.SaveFile();
     }
 
     /**
@@ -87,11 +94,32 @@ public class DamagedChest implements Serializable {
     public boolean openChest(Player player) {
         GUI gui = new WolfInventory(player, chestUUID, this);
         if (this.wolfDeath) {
+            try {
+                String sound = main.configYML.getString("Sounds.openDamagedChest.sound");
+                int pitch = main.configYML.getInt("Sounds.openDamagedChest.pitch");
+                player.playSound(player.getLocation(), Sound.valueOf(sound),
+                        1.0f, pitch);
+            } catch (Exception ex) {
+                PlayerUtils playerUtils = new PlayerUtils(player);
+                playerUtils.sendColoredMsg("&cThe sound of &NopenDamagedChest&r &cfrom config.yml is not valid.");
+                ex.printStackTrace(System.err);
+            }
             this.timesOpened++;
-            //Recuperar inventario por UUID y abrirlo
+            player.getInventory().setItemInHand(this.getItem());
+        } else {
+            try {
+                String sound = main.configYML.getString("Sounds.openNormalChest.sound");
+                int pitch = main.configYML.getInt("Sounds.openNormalChest.pitch");
+                player.playSound(player.getLocation(), Sound.valueOf(sound),
+                        1.0f, pitch);
+            } catch (Exception ex) {
+                PlayerUtils playerUtils = new PlayerUtils(player);
+                playerUtils.sendColoredMsg("&cThe sound of &nopenNormalChest&r &cfrom config.yml is not valid.");
+                ex.printStackTrace(System.err);
+            }
         }
         gui.open();
-        return this.timesOpened > type.getTimesAllowedToOpen();
+        return this.timesOpened < type.getTimesAllowedToOpen();
     }
 
     /**
@@ -130,10 +158,47 @@ public class DamagedChest implements Serializable {
         return item;
     }
 
+    /**
+     * Actualizará el tipo del cofre, logrando así mantener al día las
+     * configuraciones hechas por el usuario desde confiy.yml
+     */
     public void updateChest() {
         try {
             this.type = this.tryGetChest(getItem());
         } catch (Exception ex) {
+        }
+    }
+
+    /**
+     * Permitirá regresar los items almacenados hacia el jugador
+     *
+     * @param player Jugador a quien se devolverán los items
+     * @return 0 - Todo correcto, todos los items fueron devueltos != 0 -
+     * Cantidad de slots necesarios, -1 si no hay items que regresar
+     */
+    public int returnItems(Player player) {
+        int emptySlots = 0;
+        int requiredSlots = this.content.size();
+
+        if (requiredSlots == 0) {
+            return -1;
+        }
+
+        ItemStack[] playerInv = player.getInventory().getContents();
+        for (int i = 0; i < playerInv.length - 5; i++) {
+            if (playerInv[i] == null) {
+                emptySlots++;
+            }
+        }
+
+        if (emptySlots > requiredSlots) {
+            //Regresar items si es que hay
+            this.content.values().forEach(itm -> player.getInventory().
+                    addItem(Serializers.deserializeItem(itm)));
+            return 0;
+
+        } else {
+            return requiredSlots;
         }
     }
 

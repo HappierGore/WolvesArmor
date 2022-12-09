@@ -32,23 +32,27 @@ public class OnWolfDamaged {
                             wolfData.setArmor(null);
                             e.getEntity().playEffect(EntityEffect.WOLF_SMOKE);
                             try {
-                                player.playSound(wolf.getLocation(),
-                                        Sound.valueOf(main.configYML.getString("Sounds.armorBroken")),
-                                        1.0f, 1.0f);
+                                String sound = main.configYML.getString("Sounds.armorBroken.sound");
+                                int pitch = main.configYML.getInt("Sounds.armorBroken.pitch");
+                                player.playSound(wolf.getLocation(), Sound.valueOf(sound),
+                                        1.0f, pitch);
                             } catch (Exception ex) {
                                 PlayerUtils playerUtils = new PlayerUtils(player);
                                 playerUtils.sendColoredMsg("&cThe sound of &narmorBroken&r &cfrom config.yml is not valid.");
+                                ex.printStackTrace(System.err);
                             }
                             main.wolvesYAML.getConfig().set(wolfData.getUUID() + ".Armor", null);
                             main.wolvesYAML.SaveFile();
                         } else {
                             try {
-                                player.playSound(wolf.getLocation(),
-                                        Sound.valueOf(main.configYML.getString("Sounds.wolfDamagedWithArmor")),
-                                        1.0f, 1.0f);
+                                String sound = main.configYML.getString("Sounds.wolfDamagedWithArmor.sound");
+                                int pitch = main.configYML.getInt("Sounds.wolfDamagedWithArmor.pitch");
+                                player.playSound(wolf.getLocation(), Sound.valueOf(sound),
+                                        1.0f, pitch);
                             } catch (Exception ex) {
                                 PlayerUtils playerUtils = new PlayerUtils(player);
                                 playerUtils.sendColoredMsg("&cThe sound of &nwolfDamagedWithArmor&r &cfrom config.yml is not valid.");
+                                ex.printStackTrace(System.err);
                             }
                             double protection = Double.parseDouble(String.valueOf(armor.getType().getProtection())) / 100.0;
                             double realDamage = e.getDamage() * (1.0 - protection);

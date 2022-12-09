@@ -7,7 +7,6 @@ import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.GUI.Chest.ChestAllowed;
 import com.happiergore.wolves_armors.GUI.Chest.ChestsIcon;
 import com.happiergore.wolves_armors.main;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
@@ -21,8 +20,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 public class MainMenu extends GUI {
 
     public final WolfData wolfData;
+    public final boolean onlyEditing;
 
-    public MainMenu(Player player, String entityUUID) {
+    public MainMenu(Player player, String entityUUID, boolean onlyEditing) {
         super(player, main.configYML.getString("wolf_menu_name"));
         if (main.wolvesData.containsKey(entityUUID)) {
             this.wolfData = main.wolvesData.get(entityUUID);
@@ -30,10 +30,15 @@ public class MainMenu extends GUI {
             this.wolfData = new WolfData(entityUUID);
         }
         this.setInventory(Bukkit.createInventory((GUI) this, 9, this.INVENTORY_TITLE));
+        this.onlyEditing = onlyEditing;
     }
 
     @Override
     public void onInventoryClick(InventoryClickEvent e) {
+        if (onlyEditing) {
+            e.setCancelled(true);
+            return;
+        }
         super.onInventoryClick(e);
         if (e.getClickedInventory() == this.getInventory()) {
             if (e.getCurrentItem() == null) {

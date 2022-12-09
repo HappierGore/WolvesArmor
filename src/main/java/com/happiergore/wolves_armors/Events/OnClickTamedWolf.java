@@ -17,13 +17,24 @@ public class OnClickTamedWolf {
         }
         if (e.getRightClicked().getType() == EntityType.WOLF) {
             Wolf wolf = (Wolf) e.getRightClicked();
-            if (!wolf.isTamed()
-                    || !wolf.getOwner().getUniqueId().toString().equals(e.getPlayer().getUniqueId().toString())) {
+
+            if (!wolf.isTamed()) {
                 return;
             }
-            //wolf.setSitting(true);
-            e.setCancelled(true);
-            new MainMenu(e.getPlayer(), wolf.getUniqueId().toString()).open();
+            String ownerUUID = wolf.getOwner().getUniqueId().toString();
+            String whoClicksUUID = e.getPlayer().getUniqueId().toString();
+
+            boolean seeOther = e.getPlayer().hasPermission("wolves_armor_see_others");
+            boolean editOthers = e.getPlayer().hasPermission("wolves_armor_edit_others");
+            boolean isOwner = ownerUUID.equals(whoClicksUUID);
+
+            if (editOthers || isOwner) {
+                e.setCancelled(true);
+                new MainMenu(e.getPlayer(), wolf.getUniqueId().toString(), false).open();
+            } else if (seeOther) {
+                e.setCancelled(true);
+                new MainMenu(e.getPlayer(), wolf.getUniqueId().toString(), true).open();
+            }
         }
     }
 }

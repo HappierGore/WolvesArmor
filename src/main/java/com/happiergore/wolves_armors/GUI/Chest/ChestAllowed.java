@@ -8,6 +8,7 @@ import com.happiergore.wolves_armors.GUI.MainMenu;
 import com.happiergore.wolves_armors.Items.DamagedChest;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
+import de.tr7zw.nbtapi.NBTItem;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -19,13 +20,20 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ChestAllowed extends Behaviour {
 
+    public final boolean setChest;
+
     public ChestAllowed(GUI inventory) {
         super(inventory);
+        this.setChest = this.getGUI().getPlayer().get().hasPermission("wolves_armor_set_chest");
         this.loadMainItem();
     }
 
     @Override
     public void onClick(InventoryClickEvent e) {
+        if (!this.setChest) {
+            e.setCancelled(true);
+            return;
+        }
         if (e.getCursor().getType() == Material.AIR) {
             e.setCancelled(true);
             return;
@@ -34,6 +42,13 @@ public class ChestAllowed extends Behaviour {
         DamagedChest chest;
         try {
             chest = new DamagedChest(e.getCursor(), wolfData.getUUID());
+            if (e.getCursor().getAmount() > 1) {
+                e.getCursor().setAmount(e.getCursor().getAmount() - 1);
+                this.getGUI().getPlayer().get().getInventory().addItem(e.getCursor());
+            }
+            if (new NBTItem(e.getCursor()).getBoolean("Wolves_Armor_WolfDeath")) {
+                throw new Exception("&cThis chest is damaged. You need a new chest.");
+            }
         } catch (Exception ex) {
             e.setCancelled(true);
             this.getGUI().getPlayer().get().closeInventory();
@@ -57,7 +72,7 @@ public class ChestAllowed extends Behaviour {
 
     @Override
     public ItemStack generateMainItem() {
-        String itemPath = "OtherItems." + (true ? "ChestAllowed" : "ChestNotAllowed");
+        String itemPath = "OtherItems." + (this.setChest ? "ChestAllowed" : "ChestNotAllowed");
         Material material = Material.getMaterial(main.configYML.getString(itemPath + ".Item"));
         String displayname = main.configYML.getString(itemPath + ".Displayname");
         List<String> lore = main.configYML.getStringList(itemPath + ".Lore");

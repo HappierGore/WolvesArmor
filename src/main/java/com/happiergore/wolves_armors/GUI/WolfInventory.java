@@ -45,6 +45,23 @@ public class WolfInventory extends GUI {
             }
             this.chest.content.put(i, Serializers.serializeItem(itms[i]));
         }
+        //Si resulta que el cofre ya tiene su UUID guardada, guardamos ahí
+        if (main.chestData.getConfig().getString(chest.getChestUUID()) != null) {
+            main.chestData.getConfig().set(chest.getChestUUID(), Serializers.serialize(chest));
+            main.chestData.SaveFile();
+        }
+        //Si el cofre ya se rompió, retorna items
+        if (chest.getTimesOpened() >= chest.getType().getTimesAllowedToOpen()) {
+            if (chest.returnItems(this.getPlayer().get()) > 0) {
+                for (String str : chest.content.values()) {
+                    getPlayer().get().getWorld().dropItem(
+                            this.getPlayer().get().getLocation(),
+                            (ItemStack) Serializers.deserializeItem(str));
+                }
+            }
+            main.chestData.getConfig().set(chest.getChestUUID(), null);
+            main.chestData.SaveFile();
+        }
     }
 
     @Override

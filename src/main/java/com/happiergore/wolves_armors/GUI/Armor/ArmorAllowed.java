@@ -19,13 +19,20 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ArmorAllowed extends Behaviour {
 
+    public final boolean setArmor;
+
     public ArmorAllowed(GUI inventory) {
         super(inventory);
+        this.setArmor = this.getGUI().getPlayer().get().hasPermission("wolves_armor_set_armor");
         this.loadMainItem();
     }
 
     @Override
     public void onClick(InventoryClickEvent e) {
+        if (!this.setArmor) {
+            e.setCancelled(setArmor);
+            return;
+        }
         if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
             e.setCancelled(true);
             return;
@@ -57,7 +64,7 @@ public class ArmorAllowed extends Behaviour {
 
     @Override
     public ItemStack generateMainItem() {
-        String itemPath = "OtherItems." + (true ? "ArmorAllowed" : "ArmorNotAllowed");
+        String itemPath = "OtherItems." + (setArmor ? "ArmorAllowed" : "ArmorNotAllowed");
         Material material = Material.getMaterial(main.configYML.getString(itemPath + ".Item"));
         String displayname = main.configYML.getString(itemPath + ".Displayname");
         List<String> lore = main.configYML.getStringList(itemPath + ".Lore");
