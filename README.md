@@ -12,34 +12,32 @@ Este plugin tiene como objetivo crear armaduras para tus lobos, de modo que pued
 Para lograr este efecto, simplemente podríamos reducir en un porcentaje el daño que el lobo recibe.
 
 Las armaduras podrían ser creadas por el usuario, siguiendo la siguiente configuración:
-`
 ## **Armaduras**
-De este modo, cada que el lobo reciba daño, este será reducido en el porcentaje especificado, así, si el lobo tiene una armadura de Netherite y recibe un ataque de 4 corazones, este únicamente recibirá un daño de 2 corazones.
+` `De este modo, cada que el lobo reciba daño, este será reducido en el porcentaje especificado, así, si el lobo tiene una armadura de Netherite y recibe un ataque de 4 corazones, este únicamente recibirá un daño de 2 corazones.
 
 La durabilidad será reducida por ataque, es decir, por cada vez que el lobo es atacado, la durabilidad se reducirá en 1.
 
 La durabilidad del ítem será mostrada en su lore, mientras que esta será almacenada en un NBT.
 ## **Configuración**
-Armors:
+`Armors:`
 
-  Leather:
+`  Leather:`
 
-    Protection: 10%
+`    Protection: 10%`
 
-    Durability: 60
+`    Durability: 60`
 
-    Item: "LEATHER\_HORSE\_ARMOR"
+`    Item: "LEATHER\_HORSE\_ARMOR"`
 
-    Displayname: "&6Basic wolves armor."
+`    Displayname: "&6Basic wolves armor."`
 
-    Lore:
+`    Lore:`
 
-      - "&eDurability: &a${durability}"
+`      - "&eDurability: &a${durability}"`
 
-      - ""
+`      - ""`
 
-      - "&eThis armor protects: &a${protection}"
-`
+`      - "&eThis armor protects: &a${protection}"  `
 ## **Indicación de armaduras**
 Para indicar qué tipo de armadura tiene tu lobo, vamos a añadirle una pequeña GUI. Cada que se haga clic derecho sobre un lobo domesticado de tu propiedad se abrirá una GUI dónde podrás visualizar un pequeño inventario para tu lobo.
 
