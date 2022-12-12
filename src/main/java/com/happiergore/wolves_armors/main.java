@@ -42,7 +42,7 @@ public class main extends JavaPlugin {
         configYML = getConfig();
         console = new ConsoleUtils();
         debugMode = getConfig().getBoolean("debug_mode");
-        //updateChecker = new UpdateChecker(100948);
+        updateChecker = new UpdateChecker(106709);
 
         setupManager();
 
@@ -89,23 +89,23 @@ public class main extends JavaPlugin {
 
         msg.add("");
 
-//        switch (updateChecker.getUpdateCheckResult()) {
-//            case OUT_DATED:
-//                msg.add("&6There's a new update available:");
-//                msg.add("&9New Version: &a" + updateChecker.latestVersion);
-//                msg.add("&9Your version is: &c" + updateChecker.currentVersion);
-//                msg.add("&eDownload it here: " + "&r\n&ahttps://www.spigotmc.org/resources/stop-vine-growing.100948/");
-//                break;
-//            case UNRELEASED:
-//                msg.add("&6Your'e using beta / unreleased version: " + updateChecker.currentVersion);
-//                msg.add("&eThe latest version released is: &a" + updateChecker.latestVersion);
-//                break;
-//            case UP_TO_DATE:
-//                msg.add("&eYour'e using the latest version: &a" + updateChecker.currentVersion);
-//                break;
-//            case NO_RESULT:
-//                msg.add("&cThere was an error when trying to get the versions. Skipping...");
-//        }
+        switch (updateChecker.getUpdateCheckResult()) {
+            case OUT_DATED:
+                msg.add("&6There's a new update available:");
+                msg.add("&9New Version: &a" + updateChecker.latestVersion);
+                msg.add("&9Your version is: &c" + updateChecker.currentVersion);
+                msg.add("&eDownload it here: " + "&r\n&ahttps://www.spigotmc.org/resources/stop-vine-growing.100948/");
+                break;
+            case UNRELEASED:
+                msg.add("&6Your'e using beta / unreleased version: " + updateChecker.currentVersion);
+                msg.add("&eThe latest version released is: &a" + updateChecker.latestVersion);
+                break;
+            case UP_TO_DATE:
+                msg.add("&eYour'e using the latest version: &a" + updateChecker.currentVersion);
+                break;
+            case NO_RESULT:
+                msg.add("&cThere was an error when trying to get the versions. Skipping...");
+        }
         console.loggerMsg(msg);
     }
 
