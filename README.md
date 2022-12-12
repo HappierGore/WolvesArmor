@@ -12,16 +12,41 @@ La durabilidad será reducida por ataque, es decir, por cada vez que el lobo es 
 La durabilidad del ítem será mostrada en su lore, mientras que esta será almacenada en un NBT.
 ## **Configuración**
 ~~~
+##########################
+#       Armors info
+##########################
+
+#Protection:
+# - This value could be with % or not, it doesn't matter.
+# - It has been only tested with values within 0 and 100, lower or greater are not safe.
+# - The protection works in percentage, so, if a wolf with armor protection 50% gets
+#    10 of damage, it will only get 5.
+
+#Durability:
+# - The durability is reduced by one each time the wolf gets damage
+
+#Item:
+# This version works great on 1.19, but item names may change
+# by mc version, if it's your case, just change the item names
+# according your mc version. To see the material name, just go to google and
+# type: Spigot ${your version} material
+# then, look your item using ctrl + f and use that name.
+
+#Local placeholders:
+# - ${lostedDurability}: Represents the durability losed.
+# - ${durability}: Represents the max durability.
+# - #{protection}: Represents the protection percentage.
+
 Armors:
-  Leather:
-    Protection: 10%
-    Durability: 60
-    Item: "LEATHER\_HORSE\_ARMOR"
-    Displayname: "&6Basic wolves armor."
-    Lore:
-      - "&eDurability: &a${durability}"
-      - ""
-      - "&eThis armor protects: &a${protection}"
+    Leather:
+        Protection: 10%
+        Durability: 60
+        Item: "LEATHER_HORSE_ARMOR"
+        Displayname: "&6Basic wolves armor."
+        Lore:
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
+            - ""
+            - "&eThis armor protects: &a${protection}%"
 ~~~
 ## **Indicación de armaduras**
 Para indicar qué tipo de armadura tiene tu lobo, vamos a añadirle una pequeña GUI. Cada que se haga clic derecho sobre un lobo domesticado de tu propiedad se abrirá una GUI dónde podrás visualizar un pequeño inventario para tu lobo.
