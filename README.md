@@ -51,7 +51,7 @@ Armors:
 ## **Indicación de armaduras**
 Para indicar qué tipo de armadura tiene tu lobo, vamos a añadirle una pequeña GUI. Cada que se haga clic derecho sobre un lobo domesticado de tu propiedad se abrirá una GUI dónde podrás visualizar un pequeño inventario para tu lobo.
 
-![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.002.png)
+![](Imgs/Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.002.png)
 
 *Ilustración 1, GUI*
 
@@ -62,11 +62,11 @@ Si se es el dueño del lobo, podrás modificar las características de cada slot
 - Si se desea remover, basta con dar clic izquierdo y arrastrarlo a tu inventario.
 - La armadura podría tener una durabilidad específica, y cuando esta llegue a 0, ser romperá y desaparecerá del inventario del lobo.
 
-![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.003.png)
+![](Imgs/Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.003.png)
 
 *Ilustración 2, GUI, con permisos de armadura*
 
-![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.004.png)
+![](Imgs/Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.004.png)
 
 *Ilustración 3, GUI, sin permisos de armadura*
 
@@ -183,10 +183,10 @@ itemStack serializado: objeto cofre serializado.
 
 El “objeto cofre serializado” será actualizado cada vez que se acceda al inventario del cofre, en cuanto se rompa el cofre, el registro completo será eliminado, si el cofre no es levantado y se elimina (Life-time, damage, killed) también se removerá de los registros.
 ## **Macroproceso**
-## ![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.005.jpeg)
+## ![](Imgs/Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.005.jpeg)
 *Ilustración 4, Macroproceso*
 ## **UML clases**
-## ![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.006.jpeg)
+## ![](Imgs/Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.006.jpeg)
 *Ilustración 5, UML de clases*
 ## **Permisos**
 - Añadir cofre a lobo: wolves_armor_set_armor
