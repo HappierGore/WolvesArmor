@@ -41,6 +41,10 @@ public class ArmorAllowed extends Behaviour {
         Armor armor;
         try {
             armor = new Armor(e.getCursor(), wolfData.getUUID());
+            if (e.getCursor().getAmount() > 1) {
+                e.getCursor().setAmount(e.getCursor().getAmount() - 1);
+                this.getGUI().getPlayer().get().getInventory().addItem(e.getCursor());
+            }
         } catch (Exception ex) {
             e.setCancelled(true);
             this.getGUI().getPlayer().get().closeInventory();

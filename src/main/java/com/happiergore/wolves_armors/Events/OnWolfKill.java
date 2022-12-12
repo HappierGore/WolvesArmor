@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  *
  * @author HappieGore
  */
-public class WolfKillMob {
+public class OnWolfKill {
 
     public static void listen(EntityDamageByEntityEvent e) {
         boolean entityDeath = ((LivingEntity) e.getEntity()).getHealth() <= e.getDamage();

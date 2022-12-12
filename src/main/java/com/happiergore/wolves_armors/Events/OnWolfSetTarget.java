@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
  *
  * @author HappieGore
  */
-public class OnTargetEvent {
+public class OnWolfSetTarget {
 
     public static void listen(EntityTargetEvent e) {
         if (e.getEntity() instanceof Wolf) {

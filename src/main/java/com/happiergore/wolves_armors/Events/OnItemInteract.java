@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.happiergore.wolves_armors.Events;
 
 import com.happiergore.menusapi.Utils.PlayerUtils;
@@ -24,6 +20,7 @@ public class OnItemInteract {
         }
 
         NBTItem nbtItem = new NBTItem(e.getItem());
+
         if (nbtItem.getBoolean("Wolves_Armor_WolfDeath")) {
             String key = nbtItem.getString("Wolves_Armor_ChestUUID");
             DamagedChest chest = (DamagedChest) Serializers.deserialize(main.chestData.getConfig().getString(key));

@@ -1,18 +1,12 @@
 package com.happiergore.wolves_armors;
 
-import com.happiergore.menusapi.Events;
 import com.happiergore.wolves_armors.Data.WolfData;
-import com.happiergore.wolves_armors.Events.OnClickTamedWolf;
-import com.happiergore.wolves_armors.Events.OnWolfDamaged;
-import com.happiergore.wolves_armors.Events.OnWolfDeath;
-import com.happiergore.wolves_armors.Events.OnDragItem;
-import com.happiergore.wolves_armors.Events.OnItemInteract;
-import com.happiergore.wolves_armors.Events.OnTargetEvent;
-import com.happiergore.wolves_armors.Events.WolfKillMob;
+import com.happiergore.wolves_armors.Events.Events;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Runnables.RefreshTargets;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
+import com.happiergore.wolves_armors.Utils.Metrics.SingleLineChart;
 import com.happiergore.wolves_armors.Utils.UpdateChecker;
 import com.happiergore.wolves_armors.Utils.YAML.YamlJBDC;
 import com.happiergore.wolves_armors.cmds.Commands;
@@ -23,22 +17,13 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
  * @author HappierGore
  */
-public class main extends JavaPlugin implements Listener {
+public class main extends JavaPlugin {
 
     public static boolean debugMode;
     public static ConsoleUtils console;
@@ -66,14 +51,17 @@ public class main extends JavaPlugin implements Listener {
         Config.reloadConfig(false);
         RefreshTargets.refreshTarget();
         //Metrics
-        //int pluginId = 15538; // <-- Replace with the id of your plugin!
-        //metrics = new Metrics(this, pluginId);
+        int pluginId = 17064; // <-- Replace with the id of your plugin!
+        metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(new SingleLineChart("total_wolves_protected", ()
+                -> main.wolvesData.size()
+        ));
+
         registerCommands();
 
         //Crear config.yml en caso de que no exista
         saveDefaultConfig();
         //Registrar eventos
-        getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new Events(), this);
     }
 
@@ -82,12 +70,6 @@ public class main extends JavaPlugin implements Listener {
         Config.saveData();
     }
 
-    //***********************
-    //        EVENTOS
-    //***********************
-    //***********************
-    //        Helper
-    //***********************
     private void registerCommands() {
         this.getCommand("wolvesarmor").setExecutor(new Commands());
         this.getCommand("wolvesarmor").setTabCompleter(new argsComplete());
@@ -125,41 +107,6 @@ public class main extends JavaPlugin implements Listener {
 //                msg.add("&cThere was an error when trying to get the versions. Skipping...");
 //        }
         console.loggerMsg(msg);
-    }
-
-    @EventHandler
-    public void onClickEntity(PlayerInteractEntityEvent e) {
-        OnClickTamedWolf.listen(e);
-    }
-
-    @EventHandler
-    public void onDamageEntity(EntityDamageEvent e) {
-        OnWolfDamaged.listen(e);
-    }
-
-    @EventHandler
-    public void onDeathEntity(EntityDeathEvent e) {
-        OnWolfDeath.listen(e);
-    }
-
-    @EventHandler
-    public void onDrag(InventoryDragEvent e) {
-        OnDragItem.listen(e);
-    }
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent e) {
-        OnItemInteract.listen(e);
-    }
-
-    @EventHandler
-    public void onWolfKills(EntityDamageByEntityEvent e) {
-        WolfKillMob.listen(e);
-    }
-
-    @EventHandler
-    public void onSetTarget(EntityTargetEvent e) {
-        OnTargetEvent.listen(e);
     }
 
     private boolean setupManager() {

@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -20,8 +21,8 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
     @Override
+    @SuppressWarnings("UseSpecificCatch")
     public boolean onCommand(CommandSender sender, Command cmd, String arg, String[] args) {
-
         TextUtils textUtils = new TextUtils();
 
         if (args.length == 0) {
@@ -52,7 +53,15 @@ public class Commands implements CommandExecutor {
                 }
                 for (Armors armor : Config.armorsLoaded) {
                     if (armor.getIdentifier().equalsIgnoreCase(args[2])) {
-                        ((Player) sender).getInventory().addItem(armor.getItem(true));
+                        int amount;
+                        try {
+                            amount = Integer.parseInt(args[3]);
+                        } catch (Exception ex) {
+                            amount = 1;
+                        }
+                        ItemStack item = armor.getItem(true);
+                        item.setAmount(amount);
+                        ((Player) sender).getInventory().addItem(item);
                         return true;
                     }
                 }
@@ -67,7 +76,15 @@ public class Commands implements CommandExecutor {
                 }
                 for (Chests chest : Config.chestsLoaded) {
                     if (chest.getIdentifier().equalsIgnoreCase(args[2])) {
-                        ((Player) sender).getInventory().addItem(chest.getItem());
+                        int amount;
+                        try {
+                            amount = Integer.parseInt(args[3]);
+                        } catch (Exception ex) {
+                            amount = 1;
+                        }
+                        ItemStack item = chest.getItem();
+                        item.setAmount(amount);
+                        ((Player) sender).getInventory().addItem(item);
                         return true;
                     }
                 }

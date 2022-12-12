@@ -42,12 +42,12 @@ public class ChestAllowed extends Behaviour {
         DamagedChest chest;
         try {
             chest = new DamagedChest(e.getCursor(), wolfData.getUUID());
+            if (new NBTItem(e.getCursor()).getBoolean("Wolves_Armor_WolfDeath")) {
+                throw new Exception("&cThis chest is damaged. You need a new chest.");
+            }
             if (e.getCursor().getAmount() > 1) {
                 e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 this.getGUI().getPlayer().get().getInventory().addItem(e.getCursor());
-            }
-            if (new NBTItem(e.getCursor()).getBoolean("Wolves_Armor_WolfDeath")) {
-                throw new Exception("&cThis chest is damaged. You need a new chest.");
             }
         } catch (Exception ex) {
             e.setCancelled(true);

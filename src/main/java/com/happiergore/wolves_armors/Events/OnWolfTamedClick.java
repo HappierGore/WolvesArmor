@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
  *
  * @author HappieGore
  */
-public class OnClickTamedWolf {
+public class OnWolfTamedClick {
 
     public static void listen(PlayerInteractEntityEvent e) {
         if (!e.getPlayer().isSneaking()) {
