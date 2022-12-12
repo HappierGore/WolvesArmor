@@ -1,11 +1,3 @@
-Wolves Armors
-
-Armaduras para lobos, proyecto Spigot
-
-Edgar Uriel Herrera Franco
-
-HAPPIERGORE  México
-![](Aspose.Words.d9c1d604-2f7f-4c52-ba5b-58a3c55773be.001.png)**
 ## **Descripción**
 Este plugin tiene como objetivo crear armaduras para tus lobos, de modo que puedan soportar mucho daño.
 
