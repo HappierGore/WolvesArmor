@@ -12,8 +12,8 @@ Este plugin tiene como objetivo crear armaduras para tus lobos, de modo que pued
 Para lograr este efecto, simplemente podríamos reducir en un porcentaje el daño que el lobo recibe.
 
 Las armaduras podrían ser creadas por el usuario, siguiendo la siguiente configuración:
-## **Armaduras**
-` `De este modo, cada que el lobo reciba daño, este será reducido en el porcentaje especificado, así, si el lobo tiene una armadura de Netherite y recibe un ataque de 4 corazones, este únicamente recibirá un daño de 2 corazones.
+`## **Armaduras**
+De este modo, cada que el lobo reciba daño, este será reducido en el porcentaje especificado, así, si el lobo tiene una armadura de Netherite y recibe un ataque de 4 corazones, este únicamente recibirá un daño de 2 corazones.
 
 La durabilidad será reducida por ataque, es decir, por cada vez que el lobo es atacado, la durabilidad se reducirá en 1.
 
@@ -21,7 +21,7 @@ La durabilidad del ítem será mostrada en su lore, mientras que esta será alma
 ## **Configuración**
 Armors:
 
-`  Leather:
+  Leather:
 
     Protection: 10%
 
