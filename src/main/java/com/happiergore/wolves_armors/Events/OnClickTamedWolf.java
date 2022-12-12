@@ -3,7 +3,7 @@ package com.happiergore.wolves_armors.Events;
 import com.happiergore.wolves_armors.GUI.MainMenu;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Wolf;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 /**
  *
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
  */
 public class OnClickTamedWolf {
 
-    public static void listen(PlayerInteractAtEntityEvent e) {
+    public static void listen(PlayerInteractEntityEvent e) {
         if (!e.getPlayer().isSneaking()) {
             return;
         }

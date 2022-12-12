@@ -7,7 +7,10 @@ import com.happiergore.wolves_armors.Events.OnWolfDamaged;
 import com.happiergore.wolves_armors.Events.OnWolfDeath;
 import com.happiergore.wolves_armors.Events.OnDragItem;
 import com.happiergore.wolves_armors.Events.OnItemInteract;
+import com.happiergore.wolves_armors.Events.OnTargetEvent;
+import com.happiergore.wolves_armors.Events.WolfKillMob;
 import com.happiergore.wolves_armors.Items.Config;
+import com.happiergore.wolves_armors.Runnables.RefreshTargets;
 import com.happiergore.wolves_armors.Utils.ConsoleUtils;
 import com.happiergore.wolves_armors.Utils.Metrics;
 import com.happiergore.wolves_armors.Utils.UpdateChecker;
@@ -22,10 +25,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +64,7 @@ public class main extends JavaPlugin implements Listener {
         wolvesYAML = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "Wolves_data", false);
         chestData = new YamlJBDC(this.getDataFolder().getAbsolutePath(), "ChestData", false);
         Config.reloadConfig(false);
+        RefreshTargets.refreshTarget();
         //Metrics
         //int pluginId = 15538; // <-- Replace with the id of your plugin!
         //metrics = new Metrics(this, pluginId);
@@ -122,7 +128,7 @@ public class main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onClickEntity(PlayerInteractAtEntityEvent e) {
+    public void onClickEntity(PlayerInteractEntityEvent e) {
         OnClickTamedWolf.listen(e);
     }
 
@@ -144,6 +150,16 @@ public class main extends JavaPlugin implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         OnItemInteract.listen(e);
+    }
+
+    @EventHandler
+    public void onWolfKills(EntityDamageByEntityEvent e) {
+        WolfKillMob.listen(e);
+    }
+
+    @EventHandler
+    public void onSetTarget(EntityTargetEvent e) {
+        OnTargetEvent.listen(e);
     }
 
     private boolean setupManager() {

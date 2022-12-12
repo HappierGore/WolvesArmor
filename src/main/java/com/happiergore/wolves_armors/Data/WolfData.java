@@ -1,7 +1,8 @@
 package com.happiergore.wolves_armors.Data;
 
-import com.happiergore.wolves_armors.Items.Armor;
-import com.happiergore.wolves_armors.Items.DamagedChest;
+import com.happiergore.wolves_armors.Items.Armor.Armor;
+import com.happiergore.wolves_armors.Items.Behaviour.Behaviours;
+import com.happiergore.wolves_armors.Items.Chest.DamagedChest;
 
 /**
  *
@@ -11,11 +12,13 @@ public class WolfData {
 
     private Armor armor;
     private DamagedChest chest;
+    private Behaviours behaviour;
 
     private final String UUID;
 
     public WolfData(String entityUUID) {
         this.UUID = entityUUID;
+        this.behaviour = Behaviours.NEUTRAL;
     }
 
     public WolfData getClone() {
@@ -44,14 +47,23 @@ public class WolfData {
         this.chest = chest;
     }
 
+    public Behaviours getBehaviour() {
+        return behaviour;
+    }
+
+    public void setBehaviour(Behaviours behaviour) {
+        this.behaviour = behaviour;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("WolfData{");
-        sb.append(", entityID=").append(UUID);
-        sb.append(", armor=").append(armor.toString());
+        sb.append("armor=").append(armor);
+        sb.append(", chest=").append(chest);
+        sb.append(", behaviour=").append(behaviour);
+        sb.append(", UUID=").append(UUID);
         sb.append('}');
         return sb.toString();
     }
-
 }

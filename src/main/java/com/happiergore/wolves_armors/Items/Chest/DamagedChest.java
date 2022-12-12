@@ -1,9 +1,11 @@
-package com.happiergore.wolves_armors.Items;
+package com.happiergore.wolves_armors.Items.Chest;
 
+import com.happiergore.wolves_armors.Items.Chest.Chests;
 import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.Utils.PlayerUtils;
 import com.happiergore.menusapi.Utils.TextUtils;
 import com.happiergore.wolves_armors.GUI.WolfInventory;
+import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
 import de.tr7zw.nbtapi.NBTItem;

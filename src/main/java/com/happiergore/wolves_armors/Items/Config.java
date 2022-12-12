@@ -1,6 +1,12 @@
 package com.happiergore.wolves_armors.Items;
 
+import com.happiergore.menusapi.ItemsTypes.Behaviour;
+import com.happiergore.wolves_armors.Items.Armor.Armors;
+import com.happiergore.wolves_armors.Items.Armor.Armor;
 import com.happiergore.wolves_armors.Data.WolfData;
+import com.happiergore.wolves_armors.Items.Behaviour.Behaviours;
+import com.happiergore.wolves_armors.Items.Chest.Chests;
+import com.happiergore.wolves_armors.Items.Chest.DamagedChest;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
 import static com.happiergore.wolves_armors.main.console;
@@ -59,7 +65,6 @@ public class Config {
 
     private static void loadWolves() {
         main.wolvesYAML.getConfig().getKeys(true).forEach(itm -> {
-            System.out.println("itm:" + itm);
             if (!itm.contains(".")) {
                 String wolfUUID = itm;
                 WolfData wolfData = new WolfData(wolfUUID);
@@ -72,6 +77,12 @@ public class Config {
                 if (serializedChest != null) {
                     wolfData.setChest((DamagedChest) Serializers.deserialize(serializedChest));
                 }
+
+                String serializedBehaviour = main.wolvesYAML.getConfig().getString(wolfUUID + ".Behaviour");
+                if (serializedBehaviour != null) {
+                    wolfData.setBehaviour((Behaviours) Serializers.deserialize(serializedBehaviour));
+                }
+
                 main.wolvesData.put(wolfUUID, wolfData);
             }
         });

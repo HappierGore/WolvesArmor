@@ -2,7 +2,7 @@ package com.happiergore.wolves_armors.GUI;
 
 import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.Utils.ItemUtils;
-import com.happiergore.wolves_armors.Items.DamagedChest;
+import com.happiergore.wolves_armors.Items.Chest.DamagedChest;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
 import org.bukkit.Bukkit;

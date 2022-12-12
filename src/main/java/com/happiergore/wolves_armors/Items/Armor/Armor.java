@@ -1,5 +1,6 @@
-package com.happiergore.wolves_armors.Items;
+package com.happiergore.wolves_armors.Items.Armor;
 
+import com.happiergore.wolves_armors.Items.Config;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
 import java.util.ArrayList;

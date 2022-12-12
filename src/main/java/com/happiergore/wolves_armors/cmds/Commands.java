@@ -1,8 +1,8 @@
 package com.happiergore.wolves_armors.cmds;
 
 import com.happiergore.menusapi.Utils.PlayerUtils;
-import com.happiergore.wolves_armors.Items.Armors;
-import com.happiergore.wolves_armors.Items.Chests;
+import com.happiergore.wolves_armors.Items.Armor.Armors;
+import com.happiergore.wolves_armors.Items.Chest.Chests;
 import com.happiergore.wolves_armors.Items.Config;
 import com.happiergore.wolves_armors.Utils.TextUtils;
 import com.happiergore.wolves_armors.main;

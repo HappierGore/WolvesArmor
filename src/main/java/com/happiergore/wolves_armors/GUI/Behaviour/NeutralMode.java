@@ -1,13 +1,14 @@
-package com.happiergore.wolves_armors.GUI.Armor;
+package com.happiergore.wolves_armors.GUI.Behaviour;
 
 import com.happiergore.menusapi.GUI;
 import com.happiergore.menusapi.ItemsTypes.Behaviour;
 import com.happiergore.menusapi.Utils.ItemUtils;
 import com.happiergore.wolves_armors.Data.WolfData;
 import com.happiergore.wolves_armors.GUI.MainMenu;
-import com.happiergore.wolves_armors.Items.Armor.Armor;
+import com.happiergore.wolves_armors.Items.Behaviour.Behaviours;
 import com.happiergore.wolves_armors.Utils.Serializers;
 import com.happiergore.wolves_armors.main;
+import java.io.Serializable;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,42 +18,21 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author HappieGore
  */
-public class ArmorAllowed extends Behaviour {
+public class NeutralMode extends Behaviour implements Serializable {
 
-    public final boolean setArmor;
-
-    public ArmorAllowed(GUI inventory) {
+    public NeutralMode(GUI inventory) {
         super(inventory);
-        this.setArmor = this.getGUI().getPlayer().get().hasPermission("wolves_armor_set_armor");
         this.loadMainItem();
     }
 
     @Override
     public void onClick(InventoryClickEvent e) {
-        if (!this.setArmor) {
-            e.setCancelled(setArmor);
-            return;
-        }
-        if (e.getCursor() == null || e.getCursor().getType() == Material.AIR) {
-            e.setCancelled(true);
-            return;
-        }
         WolfData wolfData = ((MainMenu) this.getGUI()).wolfData;
-        Armor armor;
-        try {
-            armor = new Armor(e.getCursor(), wolfData.getUUID());
-        } catch (Exception ex) {
-            e.setCancelled(true);
-            this.getGUI().getPlayer().get().closeInventory();
-            this.getGUI().getPlayer().sendColoredMsg("&c" + ex.getMessage());
-            return;
-        }
+        wolfData.setBehaviour(Behaviours.AGRESSIVE);
 
-        wolfData.setArmor(armor);
-
-        main.wolvesYAML.getConfig().set(wolfData.getUUID() + ".Armor", Serializers.serialize(armor));
-        e.setCursor(null);
+        main.wolvesYAML.getConfig().set(wolfData.getUUID() + ".Behaviour", Serializers.serialize(wolfData.getBehaviour()));
         this.getGUI().updateInventory();
+
         main.wolvesData.put(wolfData.getUUID(), wolfData);
         main.wolvesYAML.SaveFile();
         e.setCancelled(true);
@@ -64,7 +44,7 @@ public class ArmorAllowed extends Behaviour {
 
     @Override
     public ItemStack generateMainItem() {
-        String itemPath = "OtherItems." + (setArmor ? "ArmorAllowed" : "ArmorNotAllowed");
+        String itemPath = "OtherItems.NeutralMode";
         Material material = Material.getMaterial(main.configYML.getString(itemPath + ".Item"));
         String displayname = main.configYML.getString(itemPath + ".Displayname");
         List<String> lore = main.configYML.getStringList(itemPath + ".Lore");

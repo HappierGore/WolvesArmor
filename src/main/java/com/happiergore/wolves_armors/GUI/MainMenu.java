@@ -4,6 +4,9 @@ import com.happiergore.wolves_armors.GUI.Armor.ArmorsIcon;
 import com.happiergore.wolves_armors.GUI.Armor.ArmorAllowed;
 import com.happiergore.menusapi.GUI;
 import com.happiergore.wolves_armors.Data.WolfData;
+import com.happiergore.wolves_armors.GUI.Behaviour.AgressiveMode;
+import com.happiergore.wolves_armors.GUI.Behaviour.NeutralMode;
+import com.happiergore.wolves_armors.GUI.Behaviour.PassiveMode;
 import com.happiergore.wolves_armors.GUI.Chest.ChestAllowed;
 import com.happiergore.wolves_armors.GUI.Chest.ChestsIcon;
 import com.happiergore.wolves_armors.main;
@@ -20,9 +23,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 public class MainMenu extends GUI {
 
     public final WolfData wolfData;
-    public final boolean onlyEditing;
+    public final boolean onlyDisplay;
 
-    public MainMenu(Player player, String entityUUID, boolean onlyEditing) {
+    public MainMenu(Player player, String entityUUID, boolean onlyDisplay) {
         super(player, main.configYML.getString("wolf_menu_name"));
         if (main.wolvesData.containsKey(entityUUID)) {
             this.wolfData = main.wolvesData.get(entityUUID);
@@ -30,12 +33,12 @@ public class MainMenu extends GUI {
             this.wolfData = new WolfData(entityUUID);
         }
         this.setInventory(Bukkit.createInventory((GUI) this, 9, this.INVENTORY_TITLE));
-        this.onlyEditing = onlyEditing;
+        this.onlyDisplay = onlyDisplay;
     }
 
     @Override
     public void onInventoryClick(InventoryClickEvent e) {
-        if (onlyEditing) {
+        if (onlyDisplay) {
             e.setCancelled(true);
             return;
         }
@@ -72,6 +75,22 @@ public class MainMenu extends GUI {
         } else {
             this.registerBtn(8, new ChestsIcon(this));
         }
+
+        switch (this.wolfData.getBehaviour()) {
+            case NEUTRAL: {
+                this.registerBtn(1, new NeutralMode(this));
+                break;
+            }
+            case AGRESSIVE: {
+                this.registerBtn(1, new AgressiveMode(this));
+                break;
+            }
+            default: {
+                this.registerBtn(1, new PassiveMode(this));
+                break;
+            }
+        }
+
     }
 
 }

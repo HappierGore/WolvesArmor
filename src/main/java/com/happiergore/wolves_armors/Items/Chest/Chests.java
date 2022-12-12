@@ -1,45 +1,44 @@
-package com.happiergore.wolves_armors.Items;
+package com.happiergore.wolves_armors.Items.Chest;
 
 import com.happiergore.menusapi.Utils.ItemUtils;
 import de.tr7zw.nbtapi.NBTItem;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Representa una armadura desde la configuración del usuario.
+ * Representa un cofre desde la configuración del usuario
  *
  * @author HappieGore
  */
-public class Armors implements Serializable {
+public class Chests implements Serializable {
 
-    private int protection;
-    private int durability;
     private String item;
     private List<String> lore;
+    private List<String> alternativeLore;
     private String displayName;
     private String identifier;
+    private int slotsUnlocked;
+    private int timesAllowedToOpen;
 
-    public Armors(String identifier, String item, List<String> lore, String displayname, int protection, int durability) {
-        this.protection = protection;
-        this.durability = durability;
+    public Chests(String identifier, String item, List<String> lore, List<String> alternativeLore, String displayname, int slotsUnlocked, int timesAllowedToOpen) {
         this.item = item;
         this.lore = lore;
+        this.alternativeLore = alternativeLore;
         this.displayName = displayname;
-        this.identifier = identifier;
+        this.identifier = "Chest_" + identifier;
+        this.slotsUnlocked = slotsUnlocked;
+        this.timesAllowedToOpen = timesAllowedToOpen;
     }
 
     /**
      * Retorna un nuevo item, tomando ya sus datos principales, como lore y
      * displayname
      *
-     * @param asNew false para hacer que no sustituya el valor del placeholder
-     * "placeholder"
      * @return ItemStack
      */
-    public ItemStack getItem(boolean asNew) {
+    public ItemStack getItem() {
         Material material = Material.getMaterial(item);
         if (material == null) {
             material = Material.BEDROCK;
@@ -50,22 +49,11 @@ public class Armors implements Serializable {
             displayName = "&cError";
         }
 
-        List<String> copyLore = new ArrayList<String>() {
-            {
-                addAll(lore);
-            }
-        };
-
-//replace placeholders
-        for (int i = 0; i < copyLore.size(); i++) {
-            copyLore.set(i, copyLore.get(i).replace("${durability}", String.valueOf(this.durability)));
-            if (asNew) {
-                copyLore.set(i, copyLore.get(i).replace("${lostedDurability}", String.valueOf(this.durability)));
-            }
-            copyLore.set(i, copyLore.get(i).replace("${protection}", String.valueOf(this.protection)));
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, lore.get(i).replace("${slots}", String.valueOf(this.slotsUnlocked)));
         }
 
-        NBTItem nbtItem = new NBTItem(new ItemUtils().generateItem(null, material, displayName, copyLore, null));
+        NBTItem nbtItem = new NBTItem(new ItemUtils().generateItem(null, material, displayName, lore, null));
         nbtItem.setString("Wolves_Armor_Identifier", this.identifier);
         return nbtItem.getItem();
     }
@@ -73,22 +61,6 @@ public class Armors implements Serializable {
     //------------------------------------
     //          Getters & Setters
     //------------------------------------
-    public int getProtection() {
-        return protection;
-    }
-
-    public void setProtection(int protection) {
-        this.protection = protection;
-    }
-
-    public int getDurability() {
-        return durability;
-    }
-
-    public void setDurability(int durability) {
-        this.durability = durability;
-    }
-
     public void setItem(String item) {
         this.item = item;
     }
@@ -115,6 +87,30 @@ public class Armors implements Serializable {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public int getSlotsUnlocked() {
+        return slotsUnlocked;
+    }
+
+    public void setSlotsUnlocked(int slotsUnlocked) {
+        this.slotsUnlocked = slotsUnlocked;
+    }
+
+    public int getTimesAllowedToOpen() {
+        return timesAllowedToOpen;
+    }
+
+    public void setTimesAllowedToOpen(int timesAllowedToOpen) {
+        this.timesAllowedToOpen = timesAllowedToOpen;
+    }
+
+    public List<String> getAlternativeLore() {
+        return alternativeLore;
+    }
+
+    public void setAlternativeLore(List<String> alternativeLore) {
+        this.alternativeLore = alternativeLore;
     }
 
 }
