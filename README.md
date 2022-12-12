@@ -20,23 +20,14 @@ La durabilidad será reducida por ataque, es decir, por cada vez que el lobo es 
 La durabilidad del ítem será mostrada en su lore, mientras que esta será almacenada en un NBT.
 ## **Configuración**
 `Armors:
-
   Leather:
-
     Protection: 10%
-
     Durability: 60
-
     Item: "LEATHER\_HORSE\_ARMOR"
-
     Displayname: "&6Basic wolves armor."
-
     Lore:
-
       - "&eDurability: &a${durability}"
-
       - ""
-
       - "&eThis armor protects: &a${protection}"`
 ## **Indicación de armaduras**
 Para indicar qué tipo de armadura tiene tu lobo, vamos a añadirle una pequeña GUI. Cada que se haga clic derecho sobre un lobo domesticado de tu propiedad se abrirá una GUI dónde podrás visualizar un pequeño inventario para tu lobo.
