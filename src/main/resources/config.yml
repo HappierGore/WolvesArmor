@@ -1,10 +1,40 @@
-#If you're facing errors, please, enable debug_mode and send me the log in my
-#discord server:
+#If you're facing errors, please, contactme in my discord server
 #https://discord.gg/dVhXcG3JHZ
-     
+
+#Debug mode will enable another commands and logs.
+#Recomended only if you want to report a bug.
 debug_mode: false
+wolf_menu_name: "Wolf settings"
 wolf_inventory_name: "Wolf inventory"
 
+#Timer to make all saved wolfs find a target if they are in Agressive mode.
+#Time in seconds, don't set to 0, it may break your server
+
+wolf_find_targets_time: 10
+
+#Time to make all saved wolfs find a target after kill a mob if they are in agressive mode.
+#Time in seconds
+
+wolf_find_targets_time_when_kill: 2
+
+Sounds:
+    armorBroken: 
+        sound: "ENTITY_ITEM_BREAK"
+        pitch: 1
+    chestBroken:
+        sound: "ENTITY_ITEM_BREAK"
+        pitch: 1
+    wolfDamagedWithArmor:
+        sound: "BLOCK_CHAIN_PLACE"
+        pitch: 1
+    openDamagedChest:
+        sound: "BLOCK_CHEST_OPEN"
+        pitch: 0
+    openNormalChest:
+        sound: "BLOCK_CHEST_OPEN"
+        pitch: 1
+
+#Items in GUI menu.
 OtherItems:
     ArmorAllowed:
         Item: "GREEN_STAINED_GLASS_PANE"
@@ -30,59 +60,188 @@ OtherItems:
         Lore:
             - "&cYou have not allowed to"
             - "&cinsert chests to your wolf"
+    SlotBlocked:
+        Item: "BARRIER"
+        Displayname: "&7Slot blocked"
+        Lore:
+            - "&cThis slot is blocked"
+            - "&cdue chest level"
+    NeutralMode:
+        Item: "BONE"
+        Displayname: "&7Neutral mode"
+        Lore:
+            - "&cYour wolf will only attack when"
+            - "&cyou get damage or it gets damage"
+    AgressiveMode:
+        Item: "REDSTONE"
+        Displayname: "&4Agressive mode"
+        Lore:
+            - "&cYour wolf will only attack"
+            - "&cevery entity in 6 blocks around"
+    PassiveMode:
+        Item: "ALLIUM"
+        Displayname: "&aPassive mode"
+        Lore:
+            - "&cYour wolf won't attack"
+
+##########################
+#       Armors info
+##########################
+
+#Protection:
+# - This value could be with % or not, it doesn't matter.
+# - It has been only tested with values within 0 and 100, lower or greater are not safe.
+# - The protection works in percentage, so, if a wolf with armor protection 50% gets
+#    10 of damage, it will only get 5.
+
+#Durability:
+# - The durability is reduced by one each time the wolf gets damage
+
+#Item:
+# This version works great on 1.19, but item names may change
+# by mc version, if it's your case, just change the item names
+# according your mc version. To see the material name, just go to google and
+# type: Spigot ${your version} material
+# then, look your item using ctrl + f and use that name.
+
+#Local placeholders:
+# - ${lostedDurability}: Represents the durability losed.
+# - ${durability}: Represents the max durability.
+# - #{protection}: Represents the protection percentage.
 
 Armors:
     Leather:
-        Protection: 10
+        Protection: 10%
         Durability: 60
         Item: "LEATHER_HORSE_ARMOR"
         Displayname: "&6Basic wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
     Iron:
-        Protection: 20
+        Protection: 20%
         Durability: 180
         Item: "IRON_HORSE_ARMOR"
         Displayname: "&6Normal wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
     Gold:
-        Protection: 30
+        Protection: 30%
         Durability: 100
         Item: "GOLDEN_HORSE_ARMOR"
         Displayname: "&6Golden wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
     Diamond:
-        Protection: 40
-        Durability: 400
+        Protection: 40%
+        Durability: 300
         Item: "DIAMOND_HORSE_ARMOR"
         Displayname: "&6Advanced wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &a${lostedDurability}&6/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
     Netherite:
-        Protection: 50
+        Protection: 50%
         Durability: 800
         Item: "NETHERITE_INGOT"
         Displayname: "&6God wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
     Inmortal:
-        Protection: 100
+        Protection: 100%
         Durability: 1000
         Item: "BEACON"
         Displayname: "&6Inmortal wolves armor."
         Lore:
-            - "&eDurability: &a${durability}"
+            - "&eDurability: &e${lostedDurability}/&a${durability}"
             - ""
-            - "&eThis armor protects: &a${protection}"
+            - "&eThis armor protects: &a${protection}%"
+
+##########################
+#       Chests info
+##########################
+
+#Slots:
+# - This value will set the amount of slots available.
+
+#Item:
+# This version works great on 1.19, but item names may change
+# by mc version, if it's your case, just change the item names
+# according your mc version. To see the material name, just go to google and
+# type: Spigot ${your version} material
+# then, look your item using ctrl + f and use that name.
+
+#Info about DamagedChest:
+#   When a wolf dies and it has a chest equiped, this chest will "get damaged",
+#   once a chest is damaged, it can only be openned a determined amount of times,
+#   this to prevent storage abuse and to prevent items loosing by drop.
+
+#CanOpenAfterDamaged:
+# - This value will allow open a Damaged chest a determined amount of times, once
+#   this limit is reached, the chest will get destroyed
+
+#Local placeholders:
+# - ${slots}: Represents the amount of slots available to usage.
+# - ${remaining_opens}: Represents the amount of times the chest can be opened before
+#   it gets destroyed
+Chests:
+    Level1:
+        Slots: 4
+        Item: "CHEST"
+        Displayname: "&aChest level 1"
+        CanOpenAfterDamaged: 3
+        Lore:
+            - "&eSlots: &a${slots}"
+        LoreWhenDamaged:
+            - "&eYou can still open it &a${remaining_opens} times"
+            - "&ebefore it gets destroyed."
+    Level2:
+        Slots: 6
+        Item: "CHEST"
+        Displayname: "&aChest level 2"
+        CanOpenAfterDamaged: 3
+        Lore:
+            - "&eSlots: &a${slots}"
+        LoreWhenDamaged:
+            - "&eYou can still open it &a${remaining_opens} times"
+            - "&ebefore it gets destroyed."        
+    Level3:
+        Slots: 10
+        Item: "CHEST"
+        Displayname: "&aChest level 3"
+        CanOpenAfterDamaged: 3
+        Lore:
+            - "&eSlots: &a${slots}"
+        LoreWhenDamaged:
+            - "&eYou can still open it &a${remaining_opens} times"
+            - "&ebefore it gets destroyed."
+
+
+##########################
+#     Behaviour info
+##########################
+
+#MaxRadius:
+# - The max radius around the wolf to find targets
+
+#IgnoreMobs:
+# - A list of mobs whose will be ignored, custom names aren't supported unless someone request it
+
+Behaviour:
+    Agressive:
+        MaxRadius: 6
+        IgnoreMobs:
+            - PLAYER
+            - CREEPER
+    Neutral:
+        IgnoreMobs:
+            - CREEPER
+            - SKELETON
